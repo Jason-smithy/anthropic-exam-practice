@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anthropic Claude Practice • Scenario Training for AI Practitioners</title>
-  <meta name="description" content="Scenario training for Anthropic Claude practitioners. Realistic scenarios covering Prompt Engineering, MCP, Tool Use, Architecture, and AI Safety." />
+  <meta name="description" content="Official scenario training for Anthropic Claude certifications. Realistic scenarios covering CCAO-F, CCDV-F, CCAR-F, and CCAR-P." />
   <!-- Google Fonts: Source Serif 4, Inter, & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -154,7 +154,7 @@
               <h1 class="text-2xl sm:text-3xl font-serif text-ink-900 mt-1 mb-2" x-text="getFocusTitle()"></h1>
               <p class="text-sm text-ink-700 leading-relaxed max-w-lg mb-3" x-text="getFocusDescription()"></p>
               <div class="text-xs text-ink-500 font-medium mb-6">
-                <span x-text="selectedTrack === 'all' ? 'All 5 Tracks Preparation' : selectedTrack"></span> · About 12 minutes
+                <span x-text="selectedTrack === 'all' ? 'All 4 Anthropic Certifications Preparation' : selectedTrack"></span> · About 12 minutes
               </div>
 
               <!-- Milestone Pipeline Gate Graphic -->
@@ -204,7 +204,7 @@
                 Why this matters
               </div>
               <p class="text-xs text-ink-800 leading-relaxed">
-                Robust Claude integration starts before production release. Explicit XML delimiters, least-privilege MCP scopes, and prompt caching are what make agent workflows fast, deterministic, and safe.
+                Robust Claude enterprise systems start before production release. XML delimiters, least-privilege MCP scopes, prompt caching, and dual-LLM moderation are what make workflows reliable, fast, and safe.
               </p>
             </div>
 
@@ -321,10 +321,10 @@
           <!-- Header Section -->
           <div class="space-y-3">
             <h1 class="text-3xl sm:text-4xl font-serif font-normal text-ink-900">Study</h1>
-            <p class="text-sm font-serif text-ink-600">Anthropic Claude Preparation · 100 scenarios, all free</p>
+            <p class="text-sm font-serif text-ink-600">Anthropic Claude Preparation · 80 scenarios, all free</p>
             
             <p class="text-xs text-ink-700 leading-relaxed max-w-3xl pt-1">
-              The five domains below follow Anthropic's Claude Engineering, Tool Use (MCP), Architecture, and AI Safety Frameworks. Every track contains 20 comprehensive scenario-based questions with in-depth rationales and distractor analyses. Every scenario is original material written for this track. Anthropic Claude is a trademark of Anthropic PBC; this product is an independent educational training tool.
+              The four certification domains below follow Anthropic's official certification paths: CCAO-F, CCDV-F, CCAR-F, and CCAR-P. Every track contains 20 comprehensive scenario-based questions with in-depth rationales and distractor analyses. Every scenario is original material written for this track. Anthropic Claude is a trademark of Anthropic PBC; this product is an independent educational training tool.
             </p>
           </div>
 
@@ -344,7 +344,7 @@
             </div>
             <div>
               <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">COVERAGE</div>
-              <div class="font-semibold text-ink-900 mt-0.5">5/5 TRACKS (100 SCENARIOS)</div>
+              <div class="font-semibold text-ink-900 mt-0.5">4/4 EXAM TRACKS (80 SCENARIOS)</div>
             </div>
           </div>
 
@@ -359,84 +359,69 @@
             </div>
           </div>
 
-          <!-- Domain Cards Grid (Matches Screenshot 2) -->
+          <!-- Domain Cards Grid (4 EXACT ANTHROPIC EXAMS) -->
           <div class="space-y-3 pt-2">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">BY DOMAIN</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">BY CERTIFICATION EXAM</span>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              <!-- Domain 1 Card -->
-              <div @click="selectAndStartTrack('Claude Certified Prompt Engineer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-slate-800 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+              <!-- Exam 1: CCAO-F -->
+              <div @click="selectAndStartTrack('Claude Certified Associate – Foundations (CCAO-F)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-slate-800 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold text-ink-500 uppercase tracking-wider">DOMAIN I</span>
+                  <span class="text-[10px] font-bold text-ink-500 uppercase tracking-wider">DOMAIN I · CCAO-F</span>
                   <span class="w-6 h-6 rounded-full bg-[#F7F6F2] text-ink-800 text-xs font-mono font-bold flex items-center justify-center">20</span>
                 </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Prompt Engineer</h3>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Associate – Foundations (CCAO-F)</h3>
                 <div class="space-y-1">
                   <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-slate-800 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Prompt Engineer') + '%'"></div>
+                    <div class="bg-slate-800 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Associate – Foundations (CCAO-F)') + '%'"></div>
                   </div>
-                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Prompt Engineer')"></div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Associate – Foundations (CCAO-F)')"></div>
                 </div>
               </div>
 
-              <!-- Domain 2 Card -->
-              <div @click="selectAndStartTrack('Claude Certified Application Developer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-blue-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+              <!-- Exam 2: CCDV-F -->
+              <div @click="selectAndStartTrack('Claude Certified Developer – Foundations (CCDV-F)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-blue-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">DOMAIN II</span>
+                  <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">DOMAIN II · CCDV-F</span>
                   <span class="w-6 h-6 rounded-full bg-blue-50 text-blue-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
                 </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Application Developer</h3>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Developer – Foundations (CCDV-F)</h3>
                 <div class="space-y-1">
                   <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-blue-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Application Developer') + '%'"></div>
+                    <div class="bg-blue-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Developer – Foundations (CCDV-F)') + '%'"></div>
                   </div>
-                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Application Developer')"></div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Developer – Foundations (CCDV-F)')"></div>
                 </div>
               </div>
 
-              <!-- Domain 3 Card -->
-              <div @click="selectAndStartTrack('Claude Agent & Tool Use Specialist (MCP)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-amber-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+              <!-- Exam 3: CCAR-F -->
+              <div @click="selectAndStartTrack('Claude Certified Architect – Foundations (CCAR-F)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-amber-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">DOMAIN III</span>
+                  <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">DOMAIN III · CCAR-F</span>
                   <span class="w-6 h-6 rounded-full bg-amber-50 text-amber-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
                 </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Agent & Tool Use Specialist (MCP)</h3>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Architect – Foundations (CCAR-F)</h3>
                 <div class="space-y-1">
                   <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-amber-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Agent & Tool Use Specialist (MCP)') + '%'"></div>
+                    <div class="bg-amber-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Architect – Foundations (CCAR-F)') + '%'"></div>
                   </div>
-                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Agent & Tool Use Specialist (MCP)')"></div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Architect – Foundations (CCAR-F)')"></div>
                 </div>
               </div>
 
-              <!-- Domain 4 Card -->
-              <div @click="selectAndStartTrack('Claude AI Solutions Architect')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-emerald-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+              <!-- Exam 4: CCAR-P -->
+              <div @click="selectAndStartTrack('Claude Certified Architect – Professional (CCAR-P)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-rose-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">DOMAIN IV</span>
-                  <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900">Claude AI Solutions Architect</h3>
-                <div class="space-y-1">
-                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-emerald-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude AI Solutions Architect') + '%'"></div>
-                  </div>
-                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude AI Solutions Architect')"></div>
-                </div>
-              </div>
-
-              <!-- Domain 5 Card -->
-              <div @click="selectAndStartTrack('Claude Safety, Governance & Red Teaming')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-rose-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3 md:col-span-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">DOMAIN V</span>
+                  <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">DOMAIN IV · CCAR-P</span>
                   <span class="w-6 h-6 rounded-full bg-rose-50 text-rose-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
                 </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Safety, Governance & Red Teaming</h3>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Architect – Professional (CCAR-P)</h3>
                 <div class="space-y-1">
                   <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-rose-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Safety, Governance & Red Teaming') + '%'"></div>
+                    <div class="bg-rose-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Architect – Professional (CCAR-P)') + '%'"></div>
                   </div>
-                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Safety, Governance & Red Teaming')"></div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Architect – Professional (CCAR-P)')"></div>
                 </div>
               </div>
 
@@ -451,7 +436,7 @@
           <!-- Back to Domains Header & Stats Bar -->
           <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-2xl shadow-sm text-xs">
             <button @click="activeQuestionView = false" class="text-xs font-medium text-ink-600 hover:text-ink-900 flex items-center gap-1">
-              ← All Domains
+              ← All Certification Tracks
             </button>
 
             <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
@@ -628,7 +613,7 @@
             <div>
               <label class="block font-semibold text-ink-700 mb-1.5">Select Track:</label>
               <select x-model="selectedExamTrack" @change="filterExamTrack(selectedExamTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-xl p-3 text-xs text-ink-900 font-medium focus:outline-none focus:border-ink-900">
-                <option value="all">All Certifications Combined (100 Questions)</option>
+                <option value="all">All Certifications Combined (80 Questions)</option>
                 <template x-for="track in tracks" :key="track">
                   <option :value="track" x-text="track + ' (20 Questions)'"></option>
                 </template>
@@ -719,7 +704,7 @@
       <div x-show="currentTab === 'progress'" class="space-y-8 max-w-4xl">
         <div>
           <h1 class="text-3xl font-serif text-ink-900">Your Progress & Mastery</h1>
-          <p class="text-xs text-ink-600 mt-1">Detailed breakdown of question coverage and domain accuracy across 100 questions.</p>
+          <p class="text-xs text-ink-600 mt-1">Detailed breakdown of question coverage and domain accuracy across 80 questions.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -831,11 +816,10 @@
         activeQuestions: [],
         examQuestions: [],
         tracks: [
-          'Claude Certified Prompt Engineer',
-          'Claude Certified Application Developer',
-          'Claude Agent & Tool Use Specialist (MCP)',
-          'Claude AI Solutions Architect',
-          'Claude Safety, Governance & Red Teaming'
+          'Claude Certified Associate – Foundations (CCAO-F)',
+          'Claude Certified Developer – Foundations (CCDV-F)',
+          'Claude Certified Architect – Foundations (CCAR-F)',
+          'Claude Certified Architect – Professional (CCAR-P)'
         ],
         userAnswers: {},
         examAnswers: {},
@@ -920,11 +904,11 @@
           } else {
             this.examQuestions = this.rawQuestions.filter(q => q.track === track);
           }
-          this.timeRemaining = this.examQuestions.length * 90;
+          this.timeRemaining = (this.examQuestions.length || 20) * 90;
         },
 
         getExamTimeAllowanceText() {
-          const count = this.examQuestions.length || 100;
+          const count = this.examQuestions.length || 80;
           const mins = Math.round((count * 90) / 60);
           return `${count} Questions • ${mins} minutes total`;
         },
@@ -937,11 +921,10 @@
         },
 
         getFocusTitle() {
-          if (this.selectedTrack === 'Claude Certified Prompt Engineer') return 'Prompt structure & XML delimiters';
-          if (this.selectedTrack === 'Claude Certified Application Developer') return 'Messages API & stream events';
-          if (this.selectedTrack === 'Claude Agent & Tool Use Specialist (MCP)') return 'MCP server architecture & tools';
-          if (this.selectedTrack === 'Claude AI Solutions Architect') return 'Prompt caching & batch scaling';
-          if (this.selectedTrack === 'Claude Safety, Governance & Red Teaming') return 'Constitutional AI & red teaming';
+          if (this.selectedTrack === 'Claude Certified Associate – Foundations (CCAO-F)') return 'Claude model family & prompt foundations';
+          if (this.selectedTrack === 'Claude Certified Developer – Foundations (CCDV-F)') return 'Messages API, streaming & tool use';
+          if (this.selectedTrack === 'Claude Certified Architect – Foundations (CCAR-F)') return 'Prompt caching, batch API & vision';
+          if (this.selectedTrack === 'Claude Certified Architect – Professional (CCAR-P)') return 'Multi-agent systems, red teaming & RSP';
           return 'Pre-launch architecture & controls';
         },
 
@@ -955,11 +938,10 @@
 
         getTrackDescription(track) {
           const descs = {
-            'Claude Certified Prompt Engineer': 'XML delimiters, prompt formatting, assistant prefilling, and CoT.',
-            'Claude Certified Application Developer': 'Messages API payloads, SSE streaming, and error handling.',
-            'Claude Agent & Tool Use Specialist (MCP)': 'Model Context Protocol, JSON tool schemas, and agent loops.',
-            'Claude AI Solutions Architect': 'Prompt caching breakpoints, Batch API, and vision processing.',
-            'Claude Safety, Governance & Red Teaming': 'Constitutional AI, prompt injection defense, and red teaming.'
+            'Claude Certified Associate – Foundations (CCAO-F)': 'Core AI concepts, model tiers, basic prompt design, XML tags, and safety principles.',
+            'Claude Certified Developer – Foundations (CCDV-F)': 'Messages API payloads, SSE event streaming, tool use schemas, and error handling.',
+            'Claude Certified Architect – Foundations (CCAR-F)': 'Prompt caching breakpoints, Message Batches API, multimodal vision, and rate-limit scaling.',
+            'Claude Certified Architect – Professional (CCAR-P)': 'Multi-agent orchestration, remote MCP topologies, jailbreak mitigations, and RSP governance.'
           };
           return descs[track] || 'Scenario-based certification practice questions.';
         },
@@ -1160,7 +1142,6 @@
             if (savedAnswers) this.userAnswers = JSON.parse(savedAnswers);
             const savedBookmarks = localStorage.getItem('anthropic_exam_bookmarks');
             if (savedBookmarks) this.bookmarks = JSON.parse(savedBookmarks);
-            this.updateStats();
           } catch (e) {}
         },
 
