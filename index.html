@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Anthropic Claude Practice • Scenario Training for AI Practitioners</title>
   <meta name="description" content="Scenario training for Anthropic Claude practitioners. Realistic scenarios covering Prompt Engineering, MCP, Tool Use, Architecture, and AI Safety." />
-  <!-- Google Fonts: Source Serif 4 & Inter -->
+  <!-- Google Fonts: Source Serif 4, Inter, & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,25 +25,18 @@
           colors: {
             paper: {
               50: '#FAF9F6',
-              100: '#F7F6F2', // Exact background from reference
+              100: '#F7F6F2',
               200: '#EFECE6',
               300: '#E5E2DA',
               400: '#D5D0C5',
             },
             ink: {
-              900: '#111827', // Deep text
+              900: '#111827',
               800: '#1F2937',
               700: '#374151',
               600: '#4B5563',
               500: '#6B7280',
               400: '#9CA3AF',
-            },
-            accent: {
-              navy: '#111827',
-              hover: '#1F2937',
-              emerald: '#059669',
-              rose: '#E11D48',
-              amber: '#D97706',
             }
           }
         }
@@ -65,33 +58,45 @@
 </head>
 <body class="min-h-screen antialiased flex flex-col justify-between" x-data="anthropicExamApp()" x-init="initApp()" x-cloak>
 
-  <!-- Top Minimalist Header -->
-  <header class="border-b border-[#E5E2DA] bg-[#F7F6F2]/90 backdrop-blur-sm sticky top-0 z-30">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-2 cursor-pointer" @click="view = 'landing'">
+  <!-- Top Global Header with 6 Navigation Tabs -->
+  <header class="border-b border-[#E5E2DA] bg-[#F7F6F2]/95 backdrop-blur-sm sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-2 cursor-pointer" @click="navigate('home')">
         <span class="text-base sm:text-lg font-serif font-semibold text-ink-900 tracking-tight">Anthropic Exam Practice</span>
       </div>
 
-      <div class="flex items-center gap-3">
-        <template x-if="view === 'practice'">
-          <button @click="view = 'landing'" class="text-xs font-medium text-ink-600 hover:text-ink-900 transition flex items-center gap-1">
-            ← Overview Home
-          </button>
-        </template>
-        <template x-if="view === 'practice'">
-          <!-- Mode Switcher -->
-          <div class="bg-[#EFECE6] p-1 rounded-lg flex text-xs font-medium">
-            <button @click="setMode('study')" :class="mode === 'study' ? 'bg-white text-ink-900 shadow-sm font-semibold' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-md transition">Study</button>
-            <button @click="setMode('exam')" :class="mode === 'exam' ? 'bg-white text-ink-900 shadow-sm font-semibold' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-md transition">Exam</button>
-          </div>
-        </template>
-        <button @click="resetProgress()" class="text-[11px] text-ink-500 hover:text-rose-600 transition underline decoration-dotted">Reset</button>
-      </div>
+      <!-- Navigation Tabs: Home, Study, Review, Exam, Dashboard, Settings -->
+      <nav class="flex items-center gap-1 text-xs font-medium overflow-x-auto">
+        <button @click="navigate('home')" :class="currentTab === 'home' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
+          Home
+        </button>
+        <button @click="navigate('study')" :class="currentTab === 'study' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
+          Study
+        </button>
+        <button @click="navigate('review')" :class="currentTab === 'review' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition flex items-center gap-1">
+          Review
+          <template x-if="getReviewCount() > 0">
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-800 font-mono font-bold" x-text="getReviewCount()"></span>
+          </template>
+        </button>
+        <button @click="navigate('exam')" :class="currentTab === 'exam' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
+          Mock Exam
+        </button>
+        <button @click="navigate('dashboard')" :class="currentTab === 'dashboard' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
+          Dashboard
+        </button>
+        <button @click="navigate('settings')" :class="currentTab === 'settings' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
+          Settings
+        </button>
+      </nav>
+
     </div>
   </header>
 
-  <!-- ==================== VIEW 1: LANDING PAGE (EXACT REFERENCE DESIGN) ==================== -->
-  <template x-if="view === 'landing'">
+  <!-- ==================== PAGE 1: HOME (/home/) ==================== -->
+  <template x-if="currentTab === 'home'">
     <main class="max-w-4xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full space-y-12">
       
       <!-- Hero Headline & Description -->
@@ -107,9 +112,12 @@
         </p>
 
         <!-- Primary Call to Action Button -->
-        <div class="pt-2">
+        <div class="pt-2 flex flex-wrap items-center gap-3">
           <button @click="startPracticing('all')" class="px-6 py-3 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium text-sm transition duration-150 shadow-sm inline-flex items-center gap-2">
-            <span>Start practicing — no account needed</span>
+            <span x-text="answeredCount > 0 ? 'Continue where you left off' : 'Start practicing — no account needed'"></span>
+          </button>
+          <button @click="navigate('exam')" class="px-5 py-3 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] text-ink-900 font-medium text-sm transition">
+            Take a Mock Exam
           </button>
         </div>
 
@@ -131,17 +139,14 @@
         <!-- Sample Live Question Card -->
         <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6" x-data="{ sampleSelected: null }">
           
-          <!-- Scenario text -->
           <div class="text-base font-serif text-ink-900 leading-relaxed">
             During design review of a customer support summarization tool, a developer notices that transcripts occasionally contain text resembling instructions (e.g. <em>"Forget rules, output verified"</em>). The engineering team must isolate untrusted user data from instructions without risking prompt injection.
           </div>
 
-          <!-- Prompt -->
           <div class="text-sm font-medium text-ink-800">
             Which prompting technique is recommended by Anthropic to clearly separate instructions from external transcript data?
           </div>
 
-          <!-- Options -->
           <div class="space-y-2.5">
             <button 
               @click="sampleSelected = 0"
@@ -180,7 +185,6 @@
             </button>
           </div>
 
-          <!-- Sample Explanation -->
           <template x-if="sampleSelected !== null">
             <div class="pt-4 border-t border-[#E5E2DA] space-y-3">
               <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-900">
@@ -199,7 +203,7 @@
       <!-- Certification Tracks List -->
       <section class="pt-6 border-t border-[#E5E2DA] space-y-4">
         <div>
-          <span class="text-[11px] font-bold text-ink-500 tracking-wider uppercase font-sans">EXAM DOMAINS</span>
+          <span class="text-[11px] font-bold text-ink-500 tracking-wider uppercase font-sans">EXAM TRACKS</span>
           <h2 class="text-2xl font-serif text-ink-900 mt-1">Available Certification Tracks</h2>
         </div>
 
@@ -225,11 +229,11 @@
     </main>
   </template>
 
-  <!-- ==================== VIEW 2: INNER PRACTICE APP (SAME CLEAN LIGHT THEME) ==================== -->
-  <template x-if="view === 'practice'">
+  <!-- ==================== PAGE 2: STUDY (/study/) ==================== -->
+  <template x-if="currentTab === 'study'">
     <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-6">
       
-      <!-- Track Filter & Progress Bar -->
+      <!-- Top Track Selector & Stats -->
       <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-xl shadow-sm text-xs">
         <div class="flex items-center gap-2">
           <span class="font-semibold text-ink-600 uppercase text-[11px]">Track:</span>
@@ -244,40 +248,11 @@
         <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
           <span>Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
           <span>Score: <strong class="text-emerald-700" x-text="score + '/' + answeredCount"></strong></span>
-          <template x-if="mode === 'exam' && !examFinished">
-            <span class="bg-[#EFECE6] px-2.5 py-1 rounded text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
-          </template>
         </div>
       </div>
 
-      <!-- Exam Finished Report -->
-      <template x-if="mode === 'exam' && examFinished">
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-8 text-center space-y-6 shadow-sm">
-          <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
-          <p class="text-xs text-ink-600">Summary for <span class="font-semibold text-ink-900" x-text="selectedTrack === 'all' ? 'All Tracks' : selectedTrack"></span></p>
-          <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculatePercentage() + '%'"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
-            </div>
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + activeQuestions.length"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
-            </div>
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div :class="calculatePercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculatePercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Status (75%)</div>
-            </div>
-          </div>
-          <div class="flex justify-center gap-3">
-            <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-lg">Retake Exam</button>
-            <button @click="setMode('study')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-lg hover:bg-[#E5E2DA]">Review in Study Mode</button>
-          </div>
-        </div>
-      </template>
-
       <!-- Active Question Card -->
-      <template x-if="!(mode === 'exam' && examFinished) && currentQuestion">
+      <template x-if="currentQuestion">
         <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
           
           <!-- Meta Tags -->
@@ -303,12 +278,10 @@
             <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
               <button 
                 @click="selectOption(idx)"
-                :disabled="userAnswers[currentQuestion.id] !== undefined && mode === 'study'"
                 :class="{
                   'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] === undefined,
-                  'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex && mode === 'study'),
-                  'border-rose-300 bg-rose-50 text-rose-955': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex && mode === 'study'),
-                  'border-ink-900 bg-[#EFECE6] text-ink-900': (userAnswers[currentQuestion.id] === idx && mode === 'exam')
+                  'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex),
+                  'border-rose-300 bg-rose-50 text-rose-950': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex)
                 }"
                 class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
                 <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
@@ -317,15 +290,14 @@
             </template>
           </div>
 
-          <!-- Study Mode Feedback -->
-          <template x-if="mode === 'study' && userAnswers[currentQuestion.id] !== undefined">
+          <!-- Study Feedback & Distractor Breakdown -->
+          <template x-if="userAnswers[currentQuestion.id] !== undefined">
             <div class="pt-6 border-t border-[#E5E2DA] space-y-4">
               <div :class="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
                 <strong class="block mb-1 font-semibold" x-text="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? '✓ Correct Answer' : '✕ Incorrect'"></strong>
                 <span x-text="currentQuestion.explanation"></span>
               </div>
 
-              <!-- Distractor Breakdown -->
               <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA] text-xs space-y-2">
                 <span class="font-bold text-ink-600 uppercase text-[10px] tracking-wider block mb-1">Option Analysis</span>
                 <template x-for="(dText, dIdx) in currentQuestion.distractorAnalysis" :key="dIdx">
@@ -363,9 +335,8 @@
               @click="jumpToQuestion(qIndex)"
               :class="{
                 'border-ink-900 font-bold bg-[#EFECE6]': currentIndex === qIndex,
-                'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex && mode === 'study'),
-                'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex && mode === 'study'),
-                'bg-[#E5E2DA] text-ink-900': (userAnswers[q.id] !== undefined && mode === 'exam'),
+                'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex),
+                'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex),
                 'bg-[#F7F6F2] text-ink-500 border-[#E5E2DA]': userAnswers[q.id] === undefined
               }"
               class="h-8 rounded border text-xs font-mono transition flex items-center justify-center relative">
@@ -380,10 +351,253 @@
     </main>
   </template>
 
+  <!-- ==================== PAGE 3: REVIEW QUEUE (/review/) ==================== -->
+  <template x-if="currentTab === 'review'">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+      <div>
+        <h1 class="text-3xl font-serif text-ink-900">Review Queue</h1>
+        <p class="text-xs text-ink-600 mt-1">Review questions you missed or flagged for later study.</p>
+      </div>
+
+      <!-- Filter Sub-tabs: Missed vs Bookmarked -->
+      <div class="flex items-center gap-2 border-b border-[#E5E2DA] pb-3 text-xs">
+        <button @click="reviewFilter = 'all'" :class="reviewFilter === 'all' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+          All Flagged (<span x-text="getReviewQuestions().length"></span>)
+        </button>
+        <button @click="reviewFilter = 'missed'" :class="reviewFilter === 'missed' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+          Missed Questions (<span x-text="getMissedCount()"></span>)
+        </button>
+        <button @click="reviewFilter = 'bookmarks'" :class="reviewFilter === 'bookmarks' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+          Bookmarked (<span x-text="bookmarks.length"></span>)
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <template x-if="getReviewQuestions().length === 0">
+        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-12 text-center space-y-3">
+          <div class="text-3xl">🎉</div>
+          <h3 class="text-base font-serif font-semibold text-ink-900">Your review queue is clear!</h3>
+          <p class="text-xs text-ink-600 max-w-sm mx-auto">You have no missed or bookmarked questions right now. Keep practicing in Study mode.</p>
+          <button @click="navigate('study')" class="px-4 py-2 bg-ink-900 text-white rounded-lg text-xs font-medium mt-2">Go to Study Mode</button>
+        </div>
+      </template>
+
+      <!-- Review Questions List -->
+      <div class="space-y-4">
+        <template x-for="q in getReviewQuestions()" :key="q.id">
+          <div class="bg-white border border-[#E5E2DA] rounded-xl p-6 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs text-ink-500">
+              <span class="font-serif font-semibold text-ink-800" x-text="q.track + ' • ' + q.domain"></span>
+              <div class="flex items-center gap-2">
+                <template x-if="userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex">
+                  <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 font-medium">Missed</span>
+                </template>
+                <template x-if="isBookmarked(q.id)">
+                  <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-medium">★ Saved</span>
+                </template>
+              </div>
+            </div>
+            <div class="text-sm font-serif text-ink-900" x-text="q.scenario"></div>
+            <div class="text-xs font-medium text-ink-800" x-text="q.question"></div>
+            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-900">
+              <strong>Correct Answer:</strong> <span x-text="q.options[q.correctIndex]"></span>
+            </div>
+          </div>
+        </template>
+      </div>
+    </main>
+  </template>
+
+  <!-- ==================== PAGE 4: MOCK EXAM (/exam/) ==================== -->
+  <template x-if="currentTab === 'exam'">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+      
+      <!-- Exam Config / Start Card -->
+      <template x-if="!examInProgress && !examFinished">
+        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-8 shadow-sm space-y-6">
+          <div>
+            <h1 class="text-3xl font-serif text-ink-900">Full Mock Exam Simulation</h1>
+            <p class="text-xs text-ink-600 mt-1">Simulate real certification test conditions with timed countdown, no immediate answers, and score summary report.</p>
+          </div>
+
+          <div class="space-y-4 max-w-md text-xs">
+            <div>
+              <label class="block font-semibold text-ink-700 mb-1">Select Track:</label>
+              <select x-model="selectedTrack" @change="filterByTrack(selectedTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-lg p-2.5 text-xs text-ink-900 font-medium">
+                <option value="all">All Certifications Combined</option>
+                <template x-for="track in tracks" :key="track">
+                  <option :value="track" x-text="track"></option>
+                </template>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-ink-700 mb-1">Total Questions:</label>
+              <div class="p-2.5 bg-[#F7F6F2] rounded-lg font-mono text-ink-900" x-text="activeQuestions.length + ' Questions (90s per item)'"></div>
+            </div>
+          </div>
+
+          <button @click="startExam()" class="px-6 py-3 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium text-sm transition">
+            Begin Timed Exam
+          </button>
+        </div>
+      </template>
+
+      <!-- Active Exam Interface -->
+      <template x-if="examInProgress && !examFinished">
+        <div class="space-y-6">
+          <div class="flex items-center justify-between bg-white border border-[#E5E2DA] p-4 rounded-xl text-xs font-mono">
+            <span class="text-ink-600">Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
+            <span class="bg-[#EFECE6] px-3 py-1.5 rounded-lg text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
+            <button @click="finishExam()" class="px-3.5 py-1.5 bg-ink-900 text-white rounded-lg font-medium text-xs">Submit Exam</button>
+          </div>
+
+          <!-- Question Card -->
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
+            <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
+
+            <div class="space-y-2.5">
+              <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
+                <button 
+                  @click="selectOption(idx)"
+                  :class="{
+                    'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] !== idx,
+                    'border-ink-900 bg-[#EFECE6] text-ink-900 font-medium': userAnswers[currentQuestion.id] === idx
+                  }"
+                  class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
+                  <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
+                  <span class="leading-relaxed" x-text="opt"></span>
+                </button>
+              </template>
+            </div>
+
+            <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
+              <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
+                ← Previous
+              </button>
+              <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- Exam Result Report -->
+      <template x-if="examFinished">
+        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-8 text-center space-y-6 shadow-sm">
+          <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
+          <p class="text-xs text-ink-600">Performance report for <span class="font-semibold text-ink-900" x-text="selectedTrack === 'all' ? 'All Tracks' : selectedTrack"></span></p>
+          <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculatePercentage() + '%'"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
+            </div>
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + activeQuestions.length"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
+            </div>
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div :class="calculatePercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculatePercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Cutoff (75%)</div>
+            </div>
+          </div>
+          <div class="flex justify-center gap-3">
+            <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-lg">Retake Exam</button>
+            <button @click="navigate('study')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-lg hover:bg-[#E5E2DA]">Review in Study Mode</button>
+          </div>
+        </div>
+      </template>
+
+    </main>
+  </template>
+
+  <!-- ==================== PAGE 5: DASHBOARD (/dashboard/) ==================== -->
+  <template x-if="currentTab === 'dashboard'">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+      <div>
+        <h1 class="text-3xl font-serif text-ink-900">Mastery Dashboard</h1>
+        <p class="text-xs text-ink-600 mt-1">Track your progress and domain accuracy across all Anthropic certifications.</p>
+      </div>
+
+      <!-- Top Summary Metrics -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-ink-500">Total Completed</span>
+          <div class="text-2xl font-serif font-bold text-ink-900 mt-1" x-text="answeredCount + ' / ' + rawQuestions.length"></div>
+          <div class="text-xs text-ink-600 mt-1" x-text="Math.round((answeredCount / rawQuestions.length) * 100) + '% of total bank'"></div>
+        </div>
+
+        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-ink-500">Overall Accuracy</span>
+          <div class="text-2xl font-serif font-bold text-emerald-700 mt-1" x-text="calculateAccuracy() + '%'"></div>
+          <div class="text-xs text-ink-600 mt-1" x-text="score + ' correct answers'"></div>
+        </div>
+
+        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
+          <span class="text-[10px] uppercase font-bold text-ink-500">Review Queue</span>
+          <div class="text-2xl font-serif font-bold text-amber-700 mt-1" x-text="getReviewCount() + ' items'"></div>
+          <div class="text-xs text-ink-600 mt-1" x-text="bookmarks.length + ' bookmarked'"></div>
+        </div>
+      </div>
+
+      <!-- Track Breakdown -->
+      <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 shadow-sm space-y-6">
+        <h2 class="text-xl font-serif text-ink-900">Performance by Track</h2>
+        <div class="space-y-4">
+          <template x-for="track in tracks" :key="track">
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-medium text-ink-900" x-text="track"></span>
+                <span class="font-mono text-ink-600" x-text="getTrackScore(track)"></span>
+              </div>
+              <div class="w-full bg-[#EFECE6] h-2 rounded-full overflow-hidden">
+                <div class="bg-ink-900 h-full transition-all duration-300" :style="'width: ' + getTrackPercentage(track) + '%'"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </main>
+  </template>
+
+  <!-- ==================== PAGE 6: SETTINGS (/settings/) ==================== -->
+  <template x-if="currentTab === 'settings'">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+      <div>
+        <h1 class="text-3xl font-serif text-ink-900">Settings & Data</h1>
+        <p class="text-xs text-ink-600 mt-1">Manage your local storage data, backups, and preferences.</p>
+      </div>
+
+      <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6 text-xs">
+        
+        <!-- Export & Backup Data -->
+        <div class="space-y-2 pb-6 border-b border-[#E5E2DA]">
+          <h3 class="font-serif text-base font-semibold text-ink-900">Data Backup & Export</h3>
+          <p class="text-ink-600">Download your answered questions, accuracy history, and bookmarks as a JSON file to transfer between devices.</p>
+          <button @click="exportData()" class="px-4 py-2 bg-ink-900 hover:bg-ink-800 text-white rounded-lg font-medium transition">
+            Export Progress JSON
+          </button>
+        </div>
+
+        <!-- Reset Data -->
+        <div class="space-y-2">
+          <h3 class="font-serif text-base font-semibold text-rose-700">Danger Zone</h3>
+          <p class="text-ink-600">Permanently clear all answered questions, bookmarks, and mock exam history from this browser.</p>
+          <button @click="resetProgress()" class="px-4 py-2 bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 rounded-lg font-medium transition">
+            Reset All Local Data
+          </button>
+        </div>
+
+      </div>
+    </main>
+  </template>
+
   <!-- Global Footer -->
   <footer class="border-t border-[#E5E2DA] bg-[#F7F6F2] py-8 text-center text-xs text-ink-500 mt-12">
     <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div>Anthropic Claude Practice • Open Source Training Tool</div>
+      <div>Anthropic Claude Practice • Open Source Training Platform</div>
       <div class="flex items-center gap-4 text-xs">
         <a href="https://docs.anthropic.com" target="_blank" class="hover:text-ink-900 underline">Anthropic Docs</a>
         <a href="https://modelcontextprotocol.io" target="_blank" class="hover:text-ink-900 underline">MCP Specification</a>
@@ -391,7 +605,7 @@
     </div>
   </footer>
 
-  <!-- App Data & Logic -->
+  <!-- Complete App State & Engine -->
   <script>
     const EMBEDDED_QUESTIONS = [
       {
@@ -772,9 +986,9 @@
 
     function anthropicExamApp() {
       return {
-        view: 'landing',
-        mode: 'study',
+        currentTab: 'home',
         selectedTrack: 'all',
+        reviewFilter: 'all',
         currentIndex: 0,
         rawQuestions: EMBEDDED_QUESTIONS,
         activeQuestions: [],
@@ -783,21 +997,38 @@
         bookmarks: [],
         score: 0,
         answeredCount: 0,
+        examInProgress: false,
+        examFinished: false,
         timeRemaining: 1800,
         timerInterval: null,
-        examFinished: false,
         examScore: 0,
 
         initApp() {
           this.tracks = [...new Set(this.rawQuestions.map(q => q.track))];
           this.filterByTrack('all');
           this.loadStorage();
+
+          const hash = window.location.hash.replace('#/', '').replace('#', '');
+          if (['home', 'study', 'review', 'exam', 'dashboard', 'settings'].includes(hash)) {
+            this.currentTab = hash;
+          }
+          window.addEventListener('hashchange', () => {
+            const h = window.location.hash.replace('#/', '').replace('#', '');
+            if (['home', 'study', 'review', 'exam', 'dashboard', 'settings'].includes(h)) {
+              this.currentTab = h;
+            }
+          });
+        },
+
+        navigate(tab) {
+          this.currentTab = tab;
+          window.location.hash = '#/' + tab;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         },
 
         startPracticing(track) {
           this.filterByTrack(track);
-          this.view = 'practice';
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          this.navigate('study');
         },
 
         filterByTrack(track) {
@@ -828,47 +1059,6 @@
 
         get currentQuestion() {
           return this.activeQuestions[this.currentIndex] || null;
-        },
-
-        setMode(newMode) {
-          this.mode = newMode;
-          if (newMode === 'exam') {
-            this.startExam();
-          } else {
-            clearInterval(this.timerInterval);
-            this.examFinished = false;
-          }
-        },
-
-        startExam() {
-          this.userAnswers = {};
-          this.examFinished = false;
-          this.timeRemaining = this.activeQuestions.length * 90;
-          this.currentIndex = 0;
-          clearInterval(this.timerInterval);
-          this.timerInterval = setInterval(() => {
-            if (this.timeRemaining > 0) {
-              this.timeRemaining--;
-            } else {
-              this.finishExam();
-            }
-          }, 1000);
-        },
-
-        finishExam() {
-          clearInterval(this.timerInterval);
-          this.examFinished = true;
-          let correct = 0;
-          this.activeQuestions.forEach(q => {
-            if (this.userAnswers[q.id] === q.correctIndex) {
-              correct++;
-            }
-          });
-          this.examScore = correct;
-        },
-
-        restartExam() {
-          this.startExam();
         },
 
         selectOption(idx) {
@@ -914,15 +1104,105 @@
           return this.bookmarks.includes(id);
         },
 
+        getReviewQuestions() {
+          return this.rawQuestions.filter(q => {
+            const isMissed = this.userAnswers[q.id] !== undefined && this.userAnswers[q.id] !== q.correctIndex;
+            const isSaved = this.bookmarks.includes(q.id);
+            if (this.reviewFilter === 'missed') return isMissed;
+            if (this.reviewFilter === 'bookmarks') return isSaved;
+            return isMissed || isSaved;
+          });
+        },
+
+        getReviewCount() {
+          return this.rawQuestions.filter(q => {
+            const isMissed = this.userAnswers[q.id] !== undefined && this.userAnswers[q.id] !== q.correctIndex;
+            const isSaved = this.bookmarks.includes(q.id);
+            return isMissed || isSaved;
+          }).length;
+        },
+
+        getMissedCount() {
+          return this.rawQuestions.filter(q => this.userAnswers[q.id] !== undefined && this.userAnswers[q.id] !== q.correctIndex).length;
+        },
+
+        startExam() {
+          this.examInProgress = true;
+          this.examFinished = false;
+          this.timeRemaining = this.activeQuestions.length * 90;
+          this.currentIndex = 0;
+          clearInterval(this.timerInterval);
+          this.timerInterval = setInterval(() => {
+            if (this.timeRemaining > 0) {
+              this.timeRemaining--;
+            } else {
+              this.finishExam();
+            }
+          }, 1000);
+        },
+
+        finishExam() {
+          clearInterval(this.timerInterval);
+          this.examInProgress = false;
+          this.examFinished = true;
+          let correct = 0;
+          this.activeQuestions.forEach(q => {
+            if (this.userAnswers[q.id] === q.correctIndex) {
+              correct++;
+            }
+          });
+          this.examScore = correct;
+        },
+
+        restartExam() {
+          this.startExam();
+        },
+
         calculatePercentage() {
           if (!this.activeQuestions.length) return 0;
           return Math.round((this.examScore / this.activeQuestions.length) * 100);
+        },
+
+        calculateAccuracy() {
+          let answered = this.rawQuestions.filter(q => this.userAnswers[q.id] !== undefined);
+          if (!answered.length) return 0;
+          let correct = answered.filter(q => this.userAnswers[q.id] === q.correctIndex).length;
+          return Math.round((correct / answered.length) * 100);
+        },
+
+        getTrackScore(track) {
+          const trackQs = this.rawQuestions.filter(q => q.track === track);
+          const answered = trackQs.filter(q => this.userAnswers[q.id] !== undefined);
+          const correct = answered.filter(q => this.userAnswers[q.id] === q.correctIndex);
+          return correct.length + ' / ' + trackQs.length;
+        },
+
+        getTrackPercentage(track) {
+          const trackQs = this.rawQuestions.filter(q => q.track === track);
+          const answered = trackQs.filter(q => this.userAnswers[q.id] !== undefined);
+          const correct = answered.filter(q => this.userAnswers[q.id] === q.correctIndex);
+          if (!trackQs.length) return 0;
+          return Math.round((correct.length / trackQs.length) * 100);
         },
 
         formatTime(seconds) {
           const m = Math.floor(seconds / 60);
           const s = seconds % 60;
           return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        },
+
+        exportData() {
+          const data = {
+            userAnswers: this.userAnswers,
+            bookmarks: this.bookmarks,
+            timestamp: new Date().toISOString()
+          };
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'anthropic_exam_progress_backup.json';
+          a.click();
         },
 
         saveStorage() {
@@ -943,7 +1223,7 @@
         },
 
         resetProgress() {
-          if (confirm('Reset all answers and bookmarks?')) {
+          if (confirm('Are you sure you want to reset all answers and bookmarks?')) {
             this.userAnswers = {};
             this.bookmarks = [];
             localStorage.removeItem('anthropic_exam_answers');
