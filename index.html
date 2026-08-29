@@ -8,7 +8,7 @@
   <!-- Google Fonts: Source Serif 4, Inter, & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Alpine.js -->
@@ -50,7 +50,7 @@
       color: #111827; 
       font-family: 'Inter', system-ui, -apple-system, sans-serif; 
     }
-    h1, h2, h3, .font-serif { 
+    h1, h2, h3, h4, .font-serif { 
       font-family: 'Source Serif 4', Georgia, Cambria, serif; 
     }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -58,552 +58,635 @@
 </head>
 <body class="min-h-screen antialiased flex flex-col justify-between" x-data="anthropicExamApp()" x-init="initApp()" x-cloak>
 
-  <!-- Top Global Header with 6 Navigation Tabs -->
-  <header class="border-b border-[#E5E2DA] bg-[#F7F6F2]/95 backdrop-blur-sm sticky top-0 z-30">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <div class="flex items-center gap-2 cursor-pointer" @click="navigate('home')">
-        <span class="text-base sm:text-lg font-serif font-semibold text-ink-900 tracking-tight">Anthropic Exam Practice</span>
+  <!-- ==================== MAIN APPLICATION CONTAINER ==================== -->
+  <div class="flex-1 flex flex-col md:flex-row min-h-screen">
+    
+    <!-- LEFT SIDEBAR (EXACT MATCH TO REFERENCE SCREENSHOT) -->
+    <aside class="w-full md:w-64 bg-[#F7F6F2] border-b md:border-b-0 md:border-r border-[#E5E2DA] p-6 flex flex-col justify-between shrink-0">
+      <div class="space-y-6">
+        
+        <!-- Brand Header -->
+        <div class="space-y-1">
+          <div class="font-serif text-xl font-semibold text-ink-900 leading-tight cursor-pointer" @click="navigate('home')">
+            Anthropic Claude<br>Practice
+          </div>
+          <div class="text-xs text-ink-500 pt-3" x-text="getGreeting()"></div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="space-y-1.5 pt-2">
+          
+          <!-- Home Nav Item -->
+          <button @click="navigate('home')" :class="currentTab === 'home' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <span :class="currentTab === 'home' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            </span>
+            <span>Home</span>
+          </button>
+
+          <!-- Practice Nav Item -->
+          <button @click="navigate('practice')" :class="currentTab === 'practice' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <span :class="currentTab === 'practice' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </span>
+            <span>Practice</span>
+          </button>
+
+          <!-- Review Nav Item with Badge -->
+          <button @click="navigate('review')" :class="currentTab === 'review' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <div class="flex items-center gap-3">
+              <span :class="currentTab === 'review' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </span>
+              <span>Review</span>
+            </div>
+            <template x-if="getReviewCount() > 0">
+              <span class="px-2 py-0.5 rounded-full text-[10px] bg-rose-100 text-rose-900 font-bold font-mono" x-text="getReviewCount()"></span>
+            </template>
+          </button>
+
+          <!-- Exam Nav Item -->
+          <button @click="navigate('exam')" :class="currentTab === 'exam' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <span :class="currentTab === 'exam' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </span>
+            <span>Exam</span>
+          </button>
+
+          <!-- Progress Nav Item -->
+          <button @click="navigate('progress')" :class="currentTab === 'progress' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <span :class="currentTab === 'progress' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </span>
+            <span>Progress</span>
+          </button>
+
+          <!-- Settings Nav Item -->
+          <button @click="navigate('settings')" :class="currentTab === 'settings' ? 'bg-[#ECE8DF] text-ink-900 font-semibold' : 'text-ink-700 hover:bg-[#EFECE6]'" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition duration-150 text-left">
+            <span :class="currentTab === 'settings' ? 'bg-ink-900 text-white' : 'bg-transparent text-ink-700'" class="w-6 h-6 rounded-lg flex items-center justify-center text-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </span>
+            <span>Settings</span>
+          </button>
+
+        </nav>
       </div>
 
-      <!-- Navigation Tabs: Home, Study, Review, Exam, Dashboard, Settings -->
-      <nav class="flex items-center gap-1 text-xs font-medium overflow-x-auto">
-        <button @click="navigate('home')" :class="currentTab === 'home' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
-          Home
-        </button>
-        <button @click="navigate('study')" :class="currentTab === 'study' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
-          Study
-        </button>
-        <button @click="navigate('review')" :class="currentTab === 'review' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition flex items-center gap-1">
-          Review
-          <template x-if="getReviewCount() > 0">
-            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-100 text-rose-800 font-mono font-bold" x-text="getReviewCount()"></span>
-          </template>
-        </button>
-        <button @click="navigate('exam')" :class="currentTab === 'exam' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
-          Mock Exam
-        </button>
-        <button @click="navigate('dashboard')" :class="currentTab === 'dashboard' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
-          Dashboard
-        </button>
-        <button @click="navigate('settings')" :class="currentTab === 'settings' ? 'text-ink-900 font-semibold bg-[#EFECE6]' : 'text-ink-600 hover:text-ink-900'" class="px-3 py-1.5 rounded-lg transition">
-          Settings
-        </button>
-      </nav>
+      <!-- Bottom Disclaimer -->
+      <div class="text-[11px] text-ink-500 pt-6 border-t border-[#E5E2DA] leading-relaxed">
+        Independent educational product. Not affiliated with any certification body.
+      </div>
+    </aside>
 
-    </div>
-  </header>
-
-  <!-- ==================== PAGE 1: HOME (/home/) ==================== -->
-  <template x-if="currentTab === 'home'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full space-y-12">
+    <!-- RIGHT MAIN CONTENT AREA -->
+    <div class="flex-1 p-4 sm:p-8 lg:p-10 max-w-6xl mx-auto w-full">
       
-      <!-- Hero Headline & Description -->
-      <section class="space-y-6">
-        <h1 class="text-3xl sm:text-5xl font-serif font-normal text-ink-900 leading-[1.15] tracking-tight">
-          Scenario training for Anthropic Claude practitioners
-        </h1>
-        <p class="text-base sm:text-lg text-ink-700 leading-relaxed max-w-3xl">
-          Realistic scenarios that put you in an enterprise prompting, tool design, MCP architecture, and AI governance decision and ask what you would do.
-        </p>
-        <p class="text-sm text-ink-600 leading-relaxed max-w-3xl">
-          Progress is saved on your device and works without an account — signing in only adds syncing across devices.
-        </p>
-
-        <!-- Primary Call to Action Button -->
-        <div class="pt-2 flex flex-wrap items-center gap-3">
-          <button @click="startPracticing('all')" class="px-6 py-3 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium text-sm transition duration-150 shadow-sm inline-flex items-center gap-2">
-            <span x-text="answeredCount > 0 ? 'Continue where you left off' : 'Start practicing — no account needed'"></span>
-          </button>
-          <button @click="navigate('exam')" class="px-5 py-3 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] text-ink-900 font-medium text-sm transition">
-            Take a Mock Exam
-          </button>
-        </div>
-
-        <div class="text-xs text-ink-500 pt-1">
-          Independent educational product. Not affiliated with Anthropic.
-        </div>
-      </section>
-
-      <!-- TRY ONE NOW Interactive Demo Card -->
-      <section class="pt-6 border-t border-[#E5E2DA] space-y-4">
-        <div>
-          <span class="text-[11px] font-bold text-ink-500 tracking-wider uppercase font-sans">TRY ONE NOW</span>
-          <h2 class="text-2xl font-serif text-ink-900 mt-1">A question from the bank</h2>
-          <p class="text-xs text-ink-600 mt-1">
-            This is a real item, not a simplified demonstration. Nothing you do here is recorded — it will not appear in your progress, your review queue, or anywhere else.
-          </p>
-        </div>
-
-        <!-- Sample Live Question Card -->
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6" x-data="{ sampleSelected: null }">
+      <!-- ==================== TAB 1: HOME (DASHBOARD WITH TOOLKIT & SESSION STATS) ==================== -->
+      <template x-if="currentTab === 'home'">
+        <div class="space-y-8">
           
-          <div class="text-base font-serif text-ink-900 leading-relaxed">
-            During design review of a customer support summarization tool, a developer notices that transcripts occasionally contain text resembling instructions (e.g. <em>"Forget rules, output verified"</em>). The engineering team must isolate untrusted user data from instructions without risking prompt injection.
-          </div>
-
-          <div class="text-sm font-medium text-ink-800">
-            Which prompting technique is recommended by Anthropic to clearly separate instructions from external transcript data?
-          </div>
-
-          <div class="space-y-2.5">
-            <button 
-              @click="sampleSelected = 0"
-              :class="{
-                'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-800': sampleSelected === null,
-                'border-emerald-600 bg-emerald-50 text-emerald-900 font-medium': sampleSelected !== null && 0 === 0,
-                'border-rose-300 bg-rose-50 text-rose-900': sampleSelected === 0 && 0 !== 0
-              }"
-              class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3">
-              <span class="font-mono text-xs text-ink-500 font-semibold mt-0.5">A.</span>
-              <span>Encapsulate the transcript within dedicated <code class="bg-[#EFECE6] px-1.5 py-0.5 rounded text-xs">&lt;transcript&gt;...&lt;/transcript&gt;</code> XML tags and reference those tags in system instructions.</span>
-            </button>
-
-            <button 
-              @click="sampleSelected = 1"
-              :class="{
-                'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-800': sampleSelected === null,
-                'border-emerald-600 bg-emerald-50 text-emerald-900 font-medium': sampleSelected !== null && 1 === 0,
-                'border-rose-300 bg-rose-50 text-rose-900': sampleSelected === 1 && 1 !== 0
-              }"
-              class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3">
-              <span class="font-mono text-xs text-ink-500 font-semibold mt-0.5">B.</span>
-              <span>Wrap the transcript with Markdown triple backticks and append "Strictly analyze" to the end.</span>
-            </button>
-
-            <button 
-              @click="sampleSelected = 2"
-              :class="{
-                'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-800': sampleSelected === null,
-                'border-emerald-600 bg-emerald-50 text-emerald-900 font-medium': sampleSelected !== null && 2 === 0,
-                'border-rose-300 bg-rose-50 text-rose-900': sampleSelected === 2 && 2 !== 0
-              }"
-              class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3">
-              <span class="font-mono text-xs text-ink-500 font-semibold mt-0.5">C.</span>
-              <span>Increase the temperature to 0.8 so the model dynamically decides which commands to obey.</span>
-            </button>
-          </div>
-
-          <template x-if="sampleSelected !== null">
-            <div class="pt-4 border-t border-[#E5E2DA] space-y-3">
-              <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-900">
-                <strong>Correct:</strong> Anthropic models are explicitly fine-tuned to parse semantic XML tags (e.g., &lt;transcript&gt;, &lt;instructions&gt;). Encapsulating user data in XML delimiters isolates untrusted inputs and mitigates prompt injection.
-              </div>
-              <div class="text-right">
-                <button @click="startPracticing('all')" class="text-xs font-semibold text-ink-900 hover:underline">
-                  Launch full question bank →
-                </button>
-              </div>
-            </div>
-          </template>
-        </div>
-      </section>
-
-      <!-- Certification Tracks List -->
-      <section class="pt-6 border-t border-[#E5E2DA] space-y-4">
-        <div>
-          <span class="text-[11px] font-bold text-ink-500 tracking-wider uppercase font-sans">EXAM TRACKS</span>
-          <h2 class="text-2xl font-serif text-ink-900 mt-1">Available Certification Tracks</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <template x-for="track in tracks" :key="track">
-            <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 hover:border-ink-400 transition cursor-pointer flex flex-col justify-between" @click="startPracticing(track)">
+          <!-- Top Grid: Main Focus Card (Left) + Side Widgets (Right) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Focus Card (8 cols) -->
+            <div class="lg:col-span-8 bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
               <div>
-                <div class="flex items-center justify-between text-xs text-ink-500 mb-2">
-                  <span class="font-mono" x-text="getTrackQuestionCount(track) + ' items'"></span>
-                  <span>Claude 3.5</span>
+                <span class="text-[11px] font-bold text-blue-700 tracking-wider uppercase font-sans">CURRENT FOCUS</span>
+                <h1 class="text-2xl sm:text-3xl font-serif text-ink-900 mt-1 mb-2" x-text="getFocusTitle()"></h1>
+                <p class="text-sm text-ink-700 leading-relaxed max-w-lg mb-3" x-text="getFocusDescription()"></p>
+                <div class="text-xs text-ink-500 font-medium mb-6">
+                  <span x-text="selectedTrack === 'all' ? 'All 5 Tracks Preparation' : selectedTrack"></span> · About 12 minutes
                 </div>
-                <h3 class="font-serif text-base font-semibold text-ink-900 mb-1" x-text="track"></h3>
-                <p class="text-xs text-ink-600 leading-relaxed mb-4" x-text="getTrackDescription(track)"></p>
-              </div>
-              <div class="text-xs font-medium text-ink-900 flex items-center gap-1 hover:underline">
-                <span>Practice this track</span> →
-              </div>
-            </div>
-          </template>
-        </div>
-      </section>
 
-    </main>
-  </template>
-
-  <!-- ==================== PAGE 2: STUDY (/study/) ==================== -->
-  <template x-if="currentTab === 'study'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-6">
-      
-      <!-- Top Track Selector & Stats -->
-      <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-xl shadow-sm text-xs">
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-ink-600 uppercase text-[11px]">Track:</span>
-          <select x-model="selectedTrack" @change="filterByTrack(selectedTrack)" class="bg-[#F7F6F2] border border-[#E5E2DA] rounded-lg px-2.5 py-1.5 text-xs text-ink-900 font-medium focus:outline-none focus:border-ink-600">
-            <option value="all">All Tracks (<span x-text="rawQuestions.length"></span>)</option>
-            <template x-for="track in tracks" :key="track">
-              <option :value="track" x-text="track"></option>
-            </template>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
-          <span>Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
-          <span>Score: <strong class="text-emerald-700" x-text="score + '/' + answeredCount"></strong></span>
-        </div>
-      </div>
-
-      <!-- Active Question Card -->
-      <template x-if="currentQuestion">
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-          
-          <!-- Meta Tags -->
-          <div class="flex items-center justify-between text-xs text-ink-500 pb-2 border-b border-[#E5E2DA]">
-            <div class="flex items-center gap-2">
-              <span class="font-serif font-semibold text-ink-800" x-text="currentQuestion.track"></span>
-              <span>•</span>
-              <span x-text="currentQuestion.domain"></span>
-            </div>
-            <button @click="toggleBookmark(currentQuestion.id)" class="hover:text-ink-900 transition flex items-center gap-1 text-xs">
-              <span x-text="isBookmarked(currentQuestion.id) ? '★ Bookmarked' : '☆ Bookmark'"></span>
-            </button>
-          </div>
-
-          <!-- Scenario -->
-          <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
-
-          <!-- Prompt Question -->
-          <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
-
-          <!-- Options -->
-          <div class="space-y-3">
-            <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
-              <button 
-                @click="selectOption(idx)"
-                :class="{
-                  'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] === undefined,
-                  'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex),
-                  'border-rose-300 bg-rose-50 text-rose-950': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex)
-                }"
-                class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
-                <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
-                <span class="leading-relaxed" x-text="opt"></span>
-              </button>
-            </template>
-          </div>
-
-          <!-- Study Feedback & Distractor Breakdown -->
-          <template x-if="userAnswers[currentQuestion.id] !== undefined">
-            <div class="pt-6 border-t border-[#E5E2DA] space-y-4">
-              <div :class="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
-                <strong class="block mb-1 font-semibold" x-text="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? '✓ Correct Answer' : '✕ Incorrect'"></strong>
-                <span x-text="currentQuestion.explanation"></span>
-              </div>
-
-              <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA] text-xs space-y-2">
-                <span class="font-bold text-ink-600 uppercase text-[10px] tracking-wider block mb-1">Option Analysis</span>
-                <template x-for="(dText, dIdx) in currentQuestion.distractorAnalysis" :key="dIdx">
-                  <div class="text-ink-700">
-                    <strong class="text-ink-900" x-text="'Option ' + String.fromCharCode(65 + parseInt(dIdx)) + ': '"></strong>
-                    <span x-text="dText"></span>
+                <!-- Milestone Pipeline Gate Graphic -->
+                <div class="bg-[#F7F6F2] border border-[#E5E2DA] rounded-2xl p-5 mb-6 text-center">
+                  <span class="text-xs font-serif text-ink-800 font-semibold block mb-4">Architecture & Gate Flow</span>
+                  <div class="flex items-center justify-between max-w-md mx-auto text-[11px] font-medium text-ink-600 relative">
+                    <div class="absolute top-2.5 left-6 right-6 h-0.5 bg-[#E5E2DA] z-0"></div>
+                    
+                    <div class="relative z-10 flex flex-col items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">1</span>
+                      <span>Delimiters</span>
+                    </div>
+                    <div class="relative z-10 flex flex-col items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">2</span>
+                      <span>MCP Schema</span>
+                    </div>
+                    <div class="relative z-10 flex flex-col items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">3</span>
+                      <span>Caching</span>
+                    </div>
+                    <div class="relative z-10 flex flex-col items-center gap-1.5">
+                      <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-mono font-bold">4</span>
+                      <span class="text-blue-900 font-semibold">Safety Gate</span>
+                    </div>
                   </div>
-                </template>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="flex flex-wrap items-center gap-4">
+                  <button @click="navigate('practice')" class="px-6 py-3 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-xs sm:text-sm transition duration-150 shadow-sm">
+                    Continue practicing
+                  </button>
+                  <button @click="openTrackSelector = true" class="text-xs font-medium text-ink-700 hover:text-ink-900 underline transition">
+                    Choose another focus
+                  </button>
+                </div>
               </div>
             </div>
-          </template>
 
-          <!-- Navigation Footer -->
-          <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
-            <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
-              ← Previous
-            </button>
-            <span class="text-ink-500 font-mono" x-text="(currentIndex + 1) + ' / ' + activeQuestions.length"></span>
-            <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
-              Next →
-            </button>
+            <!-- Right Column Widgets (4 cols) -->
+            <div class="lg:col-span-4 space-y-6">
+              
+              <!-- "Why this matters" Card -->
+              <div class="bg-[#FAF5EE] border border-[#EADBCE] rounded-3xl p-6 space-y-2">
+                <div class="flex items-center gap-2 text-amber-900 text-xs font-bold font-serif">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Why this matters
+                </div>
+                <p class="text-xs text-ink-800 leading-relaxed">
+                  Robust Claude integration starts before production release. Explicit XML delimiters, least-privilege MCP scopes, and prompt caching are what make agent workflows fast, deterministic, and safe.
+                </p>
+              </div>
+
+              <!-- Session Focus Stats Card -->
+              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 space-y-4 shadow-sm">
+                <h3 class="text-base font-serif font-semibold text-ink-900">Session focus</h3>
+                
+                <!-- Daily Goal -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-xs text-ink-600">
+                    <span>Today's goal</span>
+                    <span class="font-mono font-bold text-ink-900" x-text="todayAnswered + ' of 10'"></span>
+                  </div>
+                  <!-- 10 dots -->
+                  <div class="grid grid-cols-10 gap-1.5">
+                    <template x-for="i in 10" :key="i">
+                      <div class="h-2 rounded-full transition-all" :class="i <= todayAnswered ? 'bg-ink-900' : 'bg-[#EFECE6]'"></div>
+                    </template>
+                  </div>
+                </div>
+
+                <!-- Bank Covered -->
+                <div class="space-y-1.5 pt-2 border-t border-[#E5E2DA]">
+                  <div class="flex items-center justify-between text-xs text-ink-600">
+                    <span>Bank covered</span>
+                    <span class="font-mono font-bold text-ink-900" x-text="answeredCount + ' of ' + rawQuestions.length"></span>
+                  </div>
+                  <div class="w-full bg-[#EFECE6] h-2 rounded-full overflow-hidden">
+                    <div class="bg-ink-900 h-full transition-all" :style="'width: ' + Math.round((answeredCount / rawQuestions.length) * 100) + '%'"></div>
+                  </div>
+                </div>
+
+                <!-- Consecutive Days -->
+                <div class="flex items-center justify-between text-xs text-ink-600 pt-2 border-t border-[#E5E2DA]">
+                  <span>Consecutive days</span>
+                  <span class="font-mono font-bold text-ink-900">1 day</span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
+
+          <!-- Anthropic Toolkit Visual Cards Section -->
+          <div class="space-y-4 pt-2">
+            <h2 class="text-xl font-serif font-semibold text-ink-900">Anthropic architecture toolkit</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <!-- Card 1: Levels of human oversight / autonomy -->
+              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                    </span>
+                    <h3 class="font-serif text-base font-semibold text-ink-900">Levels of human oversight</h3>
+                  </div>
+                  <p class="text-xs text-ink-600 leading-relaxed">
+                    Three postures in descending order of human involvement. Choosing one is a judgement about how reversible a wrong outcome is — not about how confident the model sounds.
+                  </p>
+                </div>
+
+                <div class="pt-4 flex items-end justify-between gap-3 text-center text-[10px] font-medium text-ink-700">
+                  <div class="flex-1 space-y-1">
+                    <div class="h-8 bg-[#D4DFD7] rounded-lg"></div>
+                    <span>Assist</span>
+                  </div>
+                  <div class="flex-1 space-y-1">
+                    <div class="h-12 bg-[#B7CBBF] rounded-lg"></div>
+                    <span>Review</span>
+                  </div>
+                  <div class="flex-1 space-y-1">
+                    <div class="h-16 bg-[#8FAEA0] rounded-lg"></div>
+                    <span class="font-bold text-ink-900">Intervene</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: MCP Topology & Responsibility Map -->
+              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </span>
+                    <h3 class="font-serif text-base font-semibold text-ink-900">Model Context Protocol topology</h3>
+                  </div>
+                  <p class="text-xs text-ink-600 leading-relaxed">
+                    How MCP clients connect Claude to isolated servers exposing Resources, Prompts, and Tools with standard security boundaries.
+                  </p>
+                </div>
+
+                <div class="pt-4 flex items-center justify-center gap-2 text-center text-[10px] font-medium">
+                  <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">Host (Client)</span>
+                  <span class="text-ink-400">↔</span>
+                  <span class="px-2.5 py-1 rounded bg-blue-100 border border-blue-300 text-blue-900 font-bold">Claude (LLM)</span>
+                  <span class="text-ink-400">↔</span>
+                  <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">MCP Server</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </template>
 
-      <!-- Question Jump Grid -->
-      <div class="bg-white border border-[#E5E2DA] rounded-xl p-4 shadow-sm space-y-3">
-        <div class="flex items-center justify-between text-xs text-ink-600">
-          <span class="font-semibold uppercase text-[10px] tracking-wider">Question Map</span>
-          <span x-text="answeredCount + ' of ' + activeQuestions.length + ' completed'"></span>
-        </div>
-        <div class="grid grid-cols-6 sm:grid-cols-12 gap-1.5">
-          <template x-for="(q, qIndex) in activeQuestions" :key="q.id">
-            <button 
-              @click="jumpToQuestion(qIndex)"
-              :class="{
-                'border-ink-900 font-bold bg-[#EFECE6]': currentIndex === qIndex,
-                'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex),
-                'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex),
-                'bg-[#F7F6F2] text-ink-500 border-[#E5E2DA]': userAnswers[q.id] === undefined
-              }"
-              class="h-8 rounded border text-xs font-mono transition flex items-center justify-center relative">
-              <span x-text="qIndex + 1"></span>
-              <template x-if="isBookmarked(q.id)">
-                <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-              </template>
-            </button>
-          </template>
-        </div>
-      </div>
-    </main>
-  </template>
-
-  <!-- ==================== PAGE 3: REVIEW QUEUE (/review/) ==================== -->
-  <template x-if="currentTab === 'review'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
-      <div>
-        <h1 class="text-3xl font-serif text-ink-900">Review Queue</h1>
-        <p class="text-xs text-ink-600 mt-1">Review questions you missed or flagged for later study.</p>
-      </div>
-
-      <!-- Filter Sub-tabs: Missed vs Bookmarked -->
-      <div class="flex items-center gap-2 border-b border-[#E5E2DA] pb-3 text-xs">
-        <button @click="reviewFilter = 'all'" :class="reviewFilter === 'all' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-          All Flagged (<span x-text="getReviewQuestions().length"></span>)
-        </button>
-        <button @click="reviewFilter = 'missed'" :class="reviewFilter === 'missed' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-          Missed Questions (<span x-text="getMissedCount()"></span>)
-        </button>
-        <button @click="reviewFilter = 'bookmarks'" :class="reviewFilter === 'bookmarks' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-          Bookmarked (<span x-text="bookmarks.length"></span>)
-        </button>
-      </div>
-
-      <!-- Empty State -->
-      <template x-if="getReviewQuestions().length === 0">
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-12 text-center space-y-3">
-          <div class="text-3xl">🎉</div>
-          <h3 class="text-base font-serif font-semibold text-ink-900">Your review queue is clear!</h3>
-          <p class="text-xs text-ink-600 max-w-sm mx-auto">You have no missed or bookmarked questions right now. Keep practicing in Study mode.</p>
-          <button @click="navigate('study')" class="px-4 py-2 bg-ink-900 text-white rounded-lg text-xs font-medium mt-2">Go to Study Mode</button>
-        </div>
-      </template>
-
-      <!-- Review Questions List -->
-      <div class="space-y-4">
-        <template x-for="q in getReviewQuestions()" :key="q.id">
-          <div class="bg-white border border-[#E5E2DA] rounded-xl p-6 shadow-sm space-y-3">
-            <div class="flex items-center justify-between text-xs text-ink-500">
-              <span class="font-serif font-semibold text-ink-800" x-text="q.track + ' • ' + q.domain"></span>
-              <div class="flex items-center gap-2">
-                <template x-if="userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex">
-                  <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 font-medium">Missed</span>
-                </template>
-                <template x-if="isBookmarked(q.id)">
-                  <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-medium">★ Saved</span>
-                </template>
-              </div>
-            </div>
-            <div class="text-sm font-serif text-ink-900" x-text="q.scenario"></div>
-            <div class="text-xs font-medium text-ink-800" x-text="q.question"></div>
-            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-900">
-              <strong>Correct Answer:</strong> <span x-text="q.options[q.correctIndex]"></span>
-            </div>
-          </div>
-        </template>
-      </div>
-    </main>
-  </template>
-
-  <!-- ==================== PAGE 4: MOCK EXAM (/exam/) ==================== -->
-  <template x-if="currentTab === 'exam'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
-      
-      <!-- Exam Config / Start Card -->
-      <template x-if="!examInProgress && !examFinished">
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-8 shadow-sm space-y-6">
-          <div>
-            <h1 class="text-3xl font-serif text-ink-900">Full Mock Exam Simulation</h1>
-            <p class="text-xs text-ink-600 mt-1">Simulate real certification test conditions with timed countdown, no immediate answers, and score summary report.</p>
-          </div>
-
-          <div class="space-y-4 max-w-md text-xs">
-            <div>
-              <label class="block font-semibold text-ink-700 mb-1">Select Track:</label>
-              <select x-model="selectedTrack" @change="filterByTrack(selectedTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-lg p-2.5 text-xs text-ink-900 font-medium">
-                <option value="all">All Certifications Combined</option>
+      <!-- ==================== TAB 2: PRACTICE (/practice/) ==================== -->
+      <template x-if="currentTab === 'practice'">
+        <div class="space-y-6 max-w-3xl">
+          
+          <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-2xl shadow-sm text-xs">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-ink-600 uppercase text-[11px]">Track:</span>
+              <select x-model="selectedTrack" @change="filterByTrack(selectedTrack)" class="bg-[#F7F6F2] border border-[#E5E2DA] rounded-lg px-2.5 py-1.5 text-xs text-ink-900 font-medium focus:outline-none">
+                <option value="all">All Tracks (<span x-text="rawQuestions.length"></span>)</option>
                 <template x-for="track in tracks" :key="track">
                   <option :value="track" x-text="track"></option>
                 </template>
               </select>
             </div>
 
-            <div>
-              <label class="block font-semibold text-ink-700 mb-1">Total Questions:</label>
-              <div class="p-2.5 bg-[#F7F6F2] rounded-lg font-mono text-ink-900" x-text="activeQuestions.length + ' Questions (90s per item)'"></div>
+            <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
+              <span>Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
+              <span>Score: <strong class="text-emerald-700" x-text="score + '/' + answeredCount"></strong></span>
             </div>
           </div>
 
-          <button @click="startExam()" class="px-6 py-3 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium text-sm transition">
-            Begin Timed Exam
-          </button>
-        </div>
-      </template>
+          <template x-if="currentQuestion">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              
+              <div class="flex items-center justify-between text-xs text-ink-500 pb-2 border-b border-[#E5E2DA]">
+                <div class="flex items-center gap-2">
+                  <span class="font-serif font-semibold text-ink-800" x-text="currentQuestion.track"></span>
+                  <span>•</span>
+                  <span x-text="currentQuestion.domain"></span>
+                </div>
+                <button @click="toggleBookmark(currentQuestion.id)" class="hover:text-ink-900 transition flex items-center gap-1 text-xs">
+                  <span x-text="isBookmarked(currentQuestion.id) ? '★ Bookmarked' : '☆ Bookmark'"></span>
+                </button>
+              </div>
 
-      <!-- Active Exam Interface -->
-      <template x-if="examInProgress && !examFinished">
-        <div class="space-y-6">
-          <div class="flex items-center justify-between bg-white border border-[#E5E2DA] p-4 rounded-xl text-xs font-mono">
-            <span class="text-ink-600">Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
-            <span class="bg-[#EFECE6] px-3 py-1.5 rounded-lg text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
-            <button @click="finishExam()" class="px-3.5 py-1.5 bg-ink-900 text-white rounded-lg font-medium text-xs">Submit Exam</button>
-          </div>
+              <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
 
-          <!-- Question Card -->
-          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
-            <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
-            <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
+              <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
 
-            <div class="space-y-2.5">
-              <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
+              <div class="space-y-3">
+                <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
+                  <button 
+                    @click="selectOption(idx)"
+                    :class="{
+                      'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] === undefined,
+                      'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex),
+                      'border-rose-300 bg-rose-50 text-rose-950': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex)
+                    }"
+                    class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
+                    <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
+                    <span class="leading-relaxed" x-text="opt"></span>
+                  </button>
+                </template>
+              </div>
+
+              <template x-if="userAnswers[currentQuestion.id] !== undefined">
+                <div class="pt-6 border-t border-[#E5E2DA] space-y-4">
+                  <div :class="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
+                    <strong class="block mb-1 font-semibold" x-text="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? '✓ Correct Answer' : '✕ Incorrect'"></strong>
+                    <span x-text="currentQuestion.explanation"></span>
+                  </div>
+
+                  <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA] text-xs space-y-2">
+                    <span class="font-bold text-ink-600 uppercase text-[10px] tracking-wider block mb-1">Option Analysis</span>
+                    <template x-for="(dText, dIdx) in currentQuestion.distractorAnalysis" :key="dIdx">
+                      <div class="text-ink-700">
+                        <strong class="text-ink-900" x-text="'Option ' + String.fromCharCode(65 + parseInt(dIdx)) + ': '"></strong>
+                        <span x-text="dText"></span>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
+              <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
+                <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
+                  ← Previous
+                </button>
+                <span class="text-ink-500 font-mono" x-text="(currentIndex + 1) + ' / ' + activeQuestions.length"></span>
+                <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
+                  Next →
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-4 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs text-ink-600">
+              <span class="font-semibold uppercase text-[10px] tracking-wider">Question Map</span>
+              <span x-text="answeredCount + ' of ' + activeQuestions.length + ' completed'"></span>
+            </div>
+            <div class="grid grid-cols-6 sm:grid-cols-12 gap-1.5">
+              <template x-for="(q, qIndex) in activeQuestions" :key="q.id">
                 <button 
-                  @click="selectOption(idx)"
+                  @click="jumpToQuestion(qIndex)"
                   :class="{
-                    'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] !== idx,
-                    'border-ink-900 bg-[#EFECE6] text-ink-900 font-medium': userAnswers[currentQuestion.id] === idx
+                    'border-ink-900 font-bold bg-[#EFECE6]': currentIndex === qIndex,
+                    'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex),
+                    'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex),
+                    'bg-[#F7F6F2] text-ink-500 border-[#E5E2DA]': userAnswers[q.id] === undefined
                   }"
-                  class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
-                  <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
-                  <span class="leading-relaxed" x-text="opt"></span>
+                  class="h-8 rounded border text-xs font-mono transition flex items-center justify-center relative">
+                  <span x-text="qIndex + 1"></span>
+                  <template x-if="isBookmarked(q.id)">
+                    <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  </template>
                 </button>
               </template>
             </div>
+          </div>
+        </div>
+      </template>
 
-            <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
-              <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
-                ← Previous
+      <!-- ==================== TAB 3: REVIEW (/review/) ==================== -->
+      <template x-if="currentTab === 'review'">
+        <div class="space-y-8 max-w-3xl">
+          <div>
+            <h1 class="text-3xl font-serif text-ink-900">Review Queue</h1>
+            <p class="text-xs text-ink-600 mt-1">Review items you missed or bookmarked during your practice sessions.</p>
+          </div>
+
+          <div class="flex items-center gap-2 border-b border-[#E5E2DA] pb-3 text-xs">
+            <button @click="reviewFilter = 'all'" :class="reviewFilter === 'all' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+              All Items (<span x-text="getReviewQuestions().length"></span>)
+            </button>
+            <button @click="reviewFilter = 'missed'" :class="reviewFilter === 'missed' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+              Missed (<span x-text="getMissedCount()"></span>)
+            </button>
+            <button @click="reviewFilter = 'bookmarks'" :class="reviewFilter === 'bookmarks' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+              Bookmarked (<span x-text="bookmarks.length"></span>)
+            </button>
+          </div>
+
+          <template x-if="getReviewQuestions().length === 0">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-12 text-center space-y-3">
+              <div class="text-3xl">🎉</div>
+              <h3 class="text-base font-serif font-semibold text-ink-900">Review queue is empty</h3>
+              <p class="text-xs text-ink-600 max-w-sm mx-auto">No missed or flagged questions recorded yet.</p>
+              <button @click="navigate('practice')" class="px-4 py-2 bg-ink-900 text-white rounded-lg text-xs font-medium mt-2">Go to Practice Mode</button>
+            </div>
+          </template>
+
+          <div class="space-y-4">
+            <template x-for="q in getReviewQuestions()" :key="q.id">
+              <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 shadow-sm space-y-3">
+                <div class="flex items-center justify-between text-xs text-ink-500">
+                  <span class="font-serif font-semibold text-ink-800" x-text="q.track + ' • ' + q.domain"></span>
+                  <div class="flex items-center gap-2">
+                    <template x-if="userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex">
+                      <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 font-medium">Missed</span>
+                    </template>
+                    <template x-if="isBookmarked(q.id)">
+                      <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-medium">★ Saved</span>
+                    </template>
+                  </div>
+                </div>
+                <div class="text-sm font-serif text-ink-900" x-text="q.scenario"></div>
+                <div class="text-xs font-medium text-ink-800" x-text="q.question"></div>
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+                  <strong>Correct Choice:</strong> <span x-text="q.options[q.correctIndex]"></span>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- ==================== TAB 4: EXAM (/exam/) ==================== -->
+      <template x-if="currentTab === 'exam'">
+        <div class="space-y-8 max-w-3xl">
+          
+          <template x-if="!examInProgress && !examFinished">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-8 shadow-sm space-y-6">
+              <div>
+                <h1 class="text-3xl font-serif text-ink-900">Timed Mock Exam</h1>
+                <p class="text-xs text-ink-600 mt-1">Full certification simulation with 90 seconds per question and comprehensive final score report.</p>
+              </div>
+
+              <div class="space-y-4 max-w-md text-xs">
+                <div>
+                  <label class="block font-semibold text-ink-700 mb-1">Select Track:</label>
+                  <select x-model="selectedTrack" @change="filterByTrack(selectedTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-lg p-2.5 text-xs text-ink-900 font-medium">
+                    <option value="all">All Certifications Combined</option>
+                    <template x-for="track in tracks" :key="track">
+                      <option :value="track" x-text="track"></option>
+                    </template>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block font-semibold text-ink-700 mb-1">Time Allowance:</label>
+                  <div class="p-2.5 bg-[#F7F6F2] rounded-lg font-mono text-ink-900" x-text="activeQuestions.length + ' Questions • ' + Math.round((activeQuestions.length * 90) / 60) + ' minutes total'"></div>
+                </div>
+              </div>
+
+              <button @click="startExam()" class="px-6 py-3 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-sm transition">
+                Begin Mock Exam
               </button>
-              <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
-                Next →
+            </div>
+          </template>
+
+          <template x-if="examInProgress && !examFinished">
+            <div class="space-y-6">
+              <div class="flex items-center justify-between bg-white border border-[#E5E2DA] p-4 rounded-2xl text-xs font-mono">
+                <span class="text-ink-600">Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
+                <span class="bg-[#EFECE6] px-3 py-1.5 rounded-lg text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
+                <button @click="finishExam()" class="px-3.5 py-1.5 bg-ink-900 text-white rounded-lg font-medium text-xs">Submit</button>
+              </div>
+
+              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
+                <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
+
+                <div class="space-y-2.5">
+                  <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
+                    <button 
+                      @click="selectOption(idx)"
+                      :class="{
+                        'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] !== idx,
+                        'border-ink-900 bg-[#EFECE6] text-ink-900 font-medium': userAnswers[currentQuestion.id] === idx
+                      }"
+                      class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
+                      <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
+                      <span class="leading-relaxed" x-text="opt"></span>
+                    </button>
+                  </template>
+                </div>
+
+                <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
+                  <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
+                    ← Previous
+                  </button>
+                  <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
+                    Next →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="examFinished">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-8 text-center space-y-6 shadow-sm">
+              <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
+              <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+                  <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculatePercentage() + '%'"></div>
+                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
+                </div>
+                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+                  <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + activeQuestions.length"></div>
+                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
+                </div>
+                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+                  <div :class="calculatePercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculatePercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
+                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Cutoff (75%)</div>
+                </div>
+              </div>
+              <div class="flex justify-center gap-3">
+                <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-xl">Retake Exam</button>
+                <button @click="navigate('practice')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-xl hover:bg-[#E5E2DA]">Review in Practice Mode</button>
+              </div>
+            </div>
+          </template>
+
+        </div>
+      </template>
+
+      <!-- ==================== TAB 5: PROGRESS (/progress/) ==================== -->
+      <template x-if="currentTab === 'progress'">
+        <div class="space-y-8 max-w-4xl">
+          <div>
+            <h1 class="text-3xl font-serif text-ink-900">Your Progress & Mastery</h1>
+            <p class="text-xs text-ink-600 mt-1">Detailed breakdown of question coverage and domain accuracy.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+              <span class="text-[10px] uppercase font-bold text-ink-500">Bank Coverage</span>
+              <div class="text-2xl font-serif font-bold text-ink-900 mt-1" x-text="answeredCount + ' / ' + rawQuestions.length"></div>
+              <div class="text-xs text-ink-600 mt-1" x-text="Math.round((answeredCount / rawQuestions.length) * 100) + '% completed'"></div>
+            </div>
+
+            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+              <span class="text-[10px] uppercase font-bold text-ink-500">Overall Accuracy</span>
+              <div class="text-2xl font-serif font-bold text-emerald-700 mt-1" x-text="calculateAccuracy() + '%'"></div>
+              <div class="text-xs text-ink-600 mt-1" x-text="score + ' correct answers'"></div>
+            </div>
+
+            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+              <span class="text-[10px] uppercase font-bold text-ink-500">Flagged For Review</span>
+              <div class="text-2xl font-serif font-bold text-amber-700 mt-1" x-text="getReviewCount() + ' items'"></div>
+              <div class="text-xs text-ink-600 mt-1" x-text="bookmarks.length + ' bookmarked'"></div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+            <h2 class="text-xl font-serif text-ink-900">Track-by-Track Mastery</h2>
+            <div class="space-y-5">
+              <template x-for="track in tracks" :key="track">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-medium text-ink-900 font-serif" x-text="track"></span>
+                    <span class="font-mono text-ink-600" x-text="getTrackScore(track)"></span>
+                  </div>
+                  <div class="w-full bg-[#EFECE6] h-2.5 rounded-full overflow-hidden">
+                    <div class="bg-ink-900 h-full transition-all duration-300" :style="'width: ' + getTrackPercentage(track) + '%'"></div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- ==================== TAB 6: SETTINGS (/settings/) ==================== -->
+      <template x-if="currentTab === 'settings'">
+        <div class="space-y-8 max-w-3xl">
+          <div>
+            <h1 class="text-3xl font-serif text-ink-900">Settings</h1>
+            <p class="text-xs text-ink-600 mt-1">Manage local progress and data export options.</p>
+          </div>
+
+          <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 text-xs">
+            <div class="space-y-2 pb-6 border-b border-[#E5E2DA]">
+              <h3 class="font-serif text-base font-semibold text-ink-900">Backup Progress</h3>
+              <p class="text-ink-600">Export your local study progress and bookmarks as a JSON backup file.</p>
+              <button @click="exportData()" class="px-4 py-2.5 bg-ink-900 hover:bg-ink-800 text-white rounded-xl font-medium transition">
+                Download Backup JSON
+              </button>
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="font-serif text-base font-semibold text-rose-700">Clear Data</h3>
+              <p class="text-ink-600">Reset all answered questions, bookmarks, and mock exam results from this device.</p>
+              <button @click="resetProgress()" class="px-4 py-2.5 bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 rounded-xl font-medium transition">
+                Reset All Progress
               </button>
             </div>
           </div>
         </div>
       </template>
 
-      <!-- Exam Result Report -->
-      <template x-if="examFinished">
-        <div class="bg-white border border-[#E5E2DA] rounded-2xl p-8 text-center space-y-6 shadow-sm">
-          <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
-          <p class="text-xs text-ink-600">Performance report for <span class="font-semibold text-ink-900" x-text="selectedTrack === 'all' ? 'All Tracks' : selectedTrack"></span></p>
-          <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculatePercentage() + '%'"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
-            </div>
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + activeQuestions.length"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
-            </div>
-            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-              <div :class="calculatePercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculatePercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
-              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Cutoff (75%)</div>
-            </div>
+    </div>
+  </div>
+
+  <!-- EXAM / FOCUS SELECTOR MODAL -->
+  <template x-if="openTrackSelector">
+    <div class="fixed inset-0 bg-ink-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6" @click.away="openTrackSelector = false">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-serif text-ink-900">Select Exam Focus</h3>
+          <button @click="openTrackSelector = false" class="text-ink-400 hover:text-ink-700 text-lg font-bold">✕</button>
+        </div>
+
+        <div class="space-y-2.5">
+          <div @click="startPracticing('all'); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
+            <span class="font-semibold text-ink-900">All Certifications Combined</span>
+            <span class="font-mono text-ink-500" x-text="rawQuestions.length + ' items'"></span>
           </div>
-          <div class="flex justify-center gap-3">
-            <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-lg">Retake Exam</button>
-            <button @click="navigate('study')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-lg hover:bg-[#E5E2DA]">Review in Study Mode</button>
-          </div>
-        </div>
-      </template>
 
-    </main>
-  </template>
-
-  <!-- ==================== PAGE 5: DASHBOARD (/dashboard/) ==================== -->
-  <template x-if="currentTab === 'dashboard'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
-      <div>
-        <h1 class="text-3xl font-serif text-ink-900">Mastery Dashboard</h1>
-        <p class="text-xs text-ink-600 mt-1">Track your progress and domain accuracy across all Anthropic certifications.</p>
-      </div>
-
-      <!-- Top Summary Metrics -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
-          <span class="text-[10px] uppercase font-bold text-ink-500">Total Completed</span>
-          <div class="text-2xl font-serif font-bold text-ink-900 mt-1" x-text="answeredCount + ' / ' + rawQuestions.length"></div>
-          <div class="text-xs text-ink-600 mt-1" x-text="Math.round((answeredCount / rawQuestions.length) * 100) + '% of total bank'"></div>
-        </div>
-
-        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
-          <span class="text-[10px] uppercase font-bold text-ink-500">Overall Accuracy</span>
-          <div class="text-2xl font-serif font-bold text-emerald-700 mt-1" x-text="calculateAccuracy() + '%'"></div>
-          <div class="text-xs text-ink-600 mt-1" x-text="score + ' correct answers'"></div>
-        </div>
-
-        <div class="bg-white border border-[#E5E2DA] rounded-xl p-5 shadow-sm">
-          <span class="text-[10px] uppercase font-bold text-ink-500">Review Queue</span>
-          <div class="text-2xl font-serif font-bold text-amber-700 mt-1" x-text="getReviewCount() + ' items'"></div>
-          <div class="text-xs text-ink-600 mt-1" x-text="bookmarks.length + ' bookmarked'"></div>
-        </div>
-      </div>
-
-      <!-- Track Breakdown -->
-      <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 shadow-sm space-y-6">
-        <h2 class="text-xl font-serif text-ink-900">Performance by Track</h2>
-        <div class="space-y-4">
           <template x-for="track in tracks" :key="track">
-            <div class="space-y-1.5">
-              <div class="flex items-center justify-between text-xs">
-                <span class="font-medium text-ink-900" x-text="track"></span>
-                <span class="font-mono text-ink-600" x-text="getTrackScore(track)"></span>
+            <div @click="startPracticing(track); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
+              <div>
+                <div class="font-semibold text-ink-900" x-text="track"></div>
+                <div class="text-[11px] text-ink-500 mt-0.5" x-text="getTrackDescription(track)"></div>
               </div>
-              <div class="w-full bg-[#EFECE6] h-2 rounded-full overflow-hidden">
-                <div class="bg-ink-900 h-full transition-all duration-300" :style="'width: ' + getTrackPercentage(track) + '%'"></div>
-              </div>
+              <span class="font-mono text-ink-500 shrink-0 ml-2" x-text="getTrackQuestionCount(track) + ' items'"></span>
             </div>
           </template>
         </div>
       </div>
-    </main>
-  </template>
-
-  <!-- ==================== PAGE 6: SETTINGS (/settings/) ==================== -->
-  <template x-if="currentTab === 'settings'">
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
-      <div>
-        <h1 class="text-3xl font-serif text-ink-900">Settings & Data</h1>
-        <p class="text-xs text-ink-600 mt-1">Manage your local storage data, backups, and preferences.</p>
-      </div>
-
-      <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6 text-xs">
-        
-        <!-- Export & Backup Data -->
-        <div class="space-y-2 pb-6 border-b border-[#E5E2DA]">
-          <h3 class="font-serif text-base font-semibold text-ink-900">Data Backup & Export</h3>
-          <p class="text-ink-600">Download your answered questions, accuracy history, and bookmarks as a JSON file to transfer between devices.</p>
-          <button @click="exportData()" class="px-4 py-2 bg-ink-900 hover:bg-ink-800 text-white rounded-lg font-medium transition">
-            Export Progress JSON
-          </button>
-        </div>
-
-        <!-- Reset Data -->
-        <div class="space-y-2">
-          <h3 class="font-serif text-base font-semibold text-rose-700">Danger Zone</h3>
-          <p class="text-ink-600">Permanently clear all answered questions, bookmarks, and mock exam history from this browser.</p>
-          <button @click="resetProgress()" class="px-4 py-2 bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 rounded-lg font-medium transition">
-            Reset All Local Data
-          </button>
-        </div>
-
-      </div>
-    </main>
-  </template>
-
-  <!-- Global Footer -->
-  <footer class="border-t border-[#E5E2DA] bg-[#F7F6F2] py-8 text-center text-xs text-ink-500 mt-12">
-    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div>Anthropic Claude Practice • Open Source Training Platform</div>
-      <div class="flex items-center gap-4 text-xs">
-        <a href="https://docs.anthropic.com" target="_blank" class="hover:text-ink-900 underline">Anthropic Docs</a>
-        <a href="https://modelcontextprotocol.io" target="_blank" class="hover:text-ink-900 underline">MCP Specification</a>
-      </div>
     </div>
-  </footer>
+  </template>
 
   <!-- Complete App State & Engine -->
   <script>
@@ -989,6 +1072,7 @@
         currentTab: 'home',
         selectedTrack: 'all',
         reviewFilter: 'all',
+        openTrackSelector: false,
         currentIndex: 0,
         rawQuestions: EMBEDDED_QUESTIONS,
         activeQuestions: [],
@@ -997,6 +1081,7 @@
         bookmarks: [],
         score: 0,
         answeredCount: 0,
+        todayAnswered: 0,
         examInProgress: false,
         examFinished: false,
         timeRemaining: 1800,
@@ -1009,12 +1094,12 @@
           this.loadStorage();
 
           const hash = window.location.hash.replace('#/', '').replace('#', '');
-          if (['home', 'study', 'review', 'exam', 'dashboard', 'settings'].includes(hash)) {
+          if (['home', 'practice', 'review', 'exam', 'progress', 'settings'].includes(hash)) {
             this.currentTab = hash;
           }
           window.addEventListener('hashchange', () => {
             const h = window.location.hash.replace('#/', '').replace('#', '');
-            if (['home', 'study', 'review', 'exam', 'dashboard', 'settings'].includes(h)) {
+            if (['home', 'practice', 'review', 'exam', 'progress', 'settings'].includes(h)) {
               this.currentTab = h;
             }
           });
@@ -1028,7 +1113,7 @@
 
         startPracticing(track) {
           this.filterByTrack(track);
-          this.navigate('study');
+          this.navigate('practice');
         },
 
         filterByTrack(track) {
@@ -1042,19 +1127,39 @@
           this.updateStats();
         },
 
+        getGreeting() {
+          const hour = new Date().getHours();
+          if (hour < 12) return 'Good morning';
+          if (hour < 18) return 'Good afternoon';
+          return 'Good evening';
+        },
+
+        getFocusTitle() {
+          if (this.selectedTrack === 'Claude Certified Prompt Engineer') return 'Prompt structure & XML delimiters';
+          if (this.selectedTrack === 'Claude Certified Application Developer') return 'Messages API & stream events';
+          if (this.selectedTrack === 'Claude Agent & Tool Use Specialist (MCP)') return 'MCP server architecture & tools';
+          if (this.selectedTrack === 'Claude AI Solutions Architect') return 'Prompt caching & batch scaling';
+          if (this.selectedTrack === 'Claude Safety, Governance & Red Teaming') return 'Constitutional AI & red teaming';
+          return 'Pre-launch architecture & controls';
+        },
+
+        getFocusDescription() {
+          return 'Turn enterprise AI requirements into defensible prompt structures, tool schemas, and production deployment decisions.';
+        },
+
         getTrackQuestionCount(track) {
           return this.rawQuestions.filter(q => q.track === track).length;
         },
 
         getTrackDescription(track) {
           const descs = {
-            'Claude Certified Prompt Engineer': 'Master XML delimiters, prompt formatting, assistant prefilling, and chain-of-thought.',
-            'Claude Certified Application Developer': 'Messages API payloads, SSE event streaming, error handling, and token management.',
-            'Claude Agent & Tool Use Specialist (MCP)': 'Model Context Protocol, JSON tool schemas, stdio transports, and multi-turn agent loops.',
-            'Claude AI Solutions Architect': 'Prompt caching breakpoints, Message Batches API, multimodal vision, and cost optimization.',
-            'Claude Safety, Governance & Red Teaming': 'Constitutional AI, prompt injection defenses, automated red teaming, and refusal tuning.'
+            'Claude Certified Prompt Engineer': 'XML delimiters, prompt formatting, assistant prefilling, and chain-of-thought.',
+            'Claude Certified Application Developer': 'Messages API payloads, SSE event streaming, and error retry strategies.',
+            'Claude Agent & Tool Use Specialist (MCP)': 'Model Context Protocol, JSON tool schemas, and agent loops.',
+            'Claude AI Solutions Architect': 'Prompt caching breakpoints, Batch API, and vision processing.',
+            'Claude Safety, Governance & Red Teaming': 'Constitutional AI, prompt injection defense, and red teaming.'
           };
-          return descs[track] || 'Comprehensive scenario-based test bank.';
+          return descs[track] || 'Scenario-based certification practice questions.';
         },
 
         get currentQuestion() {
@@ -1073,6 +1178,7 @@
           let answered = this.activeQuestions.filter(q => this.userAnswers[q.id] !== undefined);
           this.answeredCount = answered.length;
           this.score = answered.filter(q => this.userAnswers[q.id] === q.correctIndex).length;
+          this.todayAnswered = Math.min(10, this.answeredCount);
         },
 
         nextQuestion() {
