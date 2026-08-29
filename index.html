@@ -12,7 +12,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Alpine.js -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -56,7 +56,7 @@
     .font-mono { font-family: 'JetBrains Mono', monospace; }
   </style>
 </head>
-<body class="min-h-screen antialiased flex flex-col justify-between" x-data="anthropicExamApp()" x-init="initApp()" x-cloak>
+<body class="min-h-screen antialiased flex flex-col justify-between" x-data="anthropicExamApp()" x-init="initApp()">
 
   <!-- ==================== MAIN APPLICATION CONTAINER ==================== -->
   <div class="flex-1 flex flex-col md:flex-row min-h-screen">
@@ -142,704 +142,682 @@
     <div class="flex-1 p-4 sm:p-8 lg:p-10 max-w-6xl mx-auto w-full">
       
       <!-- ==================== TAB 1: HOME (DASHBOARD WITH TOOLKIT & SESSION STATS) ==================== -->
-      <template x-if="currentTab === 'home'">
-        <div class="space-y-8">
+      <div x-show="currentTab === 'home'" class="space-y-8">
+        
+        <!-- Top Grid: Main Focus Card (Left) + Side Widgets (Right) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          <!-- Top Grid: Main Focus Card (Left) + Side Widgets (Right) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            <!-- Left Focus Card (8 cols) -->
-            <div class="lg:col-span-8 bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
-              <div>
-                <span class="text-[11px] font-bold text-blue-700 tracking-wider uppercase font-sans">CURRENT FOCUS</span>
-                <h1 class="text-2xl sm:text-3xl font-serif text-ink-900 mt-1 mb-2" x-text="getFocusTitle()"></h1>
-                <p class="text-sm text-ink-700 leading-relaxed max-w-lg mb-3" x-text="getFocusDescription()"></p>
-                <div class="text-xs text-ink-500 font-medium mb-6">
-                  <span x-text="selectedTrack === 'all' ? 'All 5 Tracks Preparation' : selectedTrack"></span> · About 12 minutes
-                </div>
+          <!-- Left Focus Card (8 cols) -->
+          <div class="lg:col-span-8 bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-blue-700 tracking-wider uppercase font-sans">CURRENT FOCUS</span>
+              <h1 class="text-2xl sm:text-3xl font-serif text-ink-900 mt-1 mb-2" x-text="getFocusTitle()"></h1>
+              <p class="text-sm text-ink-700 leading-relaxed max-w-lg mb-3" x-text="getFocusDescription()"></p>
+              <div class="text-xs text-ink-500 font-medium mb-6">
+                <span x-text="selectedTrack === 'all' ? 'All 5 Tracks Preparation' : selectedTrack"></span> · About 12 minutes
+              </div>
 
-                <!-- Milestone Pipeline Gate Graphic -->
-                <div class="bg-[#F7F6F2] border border-[#E5E2DA] rounded-2xl p-5 mb-6 text-center">
-                  <span class="text-xs font-serif text-ink-800 font-semibold block mb-4">Architecture & Gate Flow</span>
-                  <div class="flex items-center justify-between max-w-md mx-auto text-[11px] font-medium text-ink-600 relative">
-                    <div class="absolute top-2.5 left-6 right-6 h-0.5 bg-[#E5E2DA] z-0"></div>
-                    
-                    <div class="relative z-10 flex flex-col items-center gap-1.5">
-                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">1</span>
-                      <span>Delimiters</span>
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center gap-1.5">
-                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">2</span>
-                      <span>MCP Schema</span>
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center gap-1.5">
-                      <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">3</span>
-                      <span>Caching</span>
-                    </div>
-                    <div class="relative z-10 flex flex-col items-center gap-1.5">
-                      <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-mono font-bold">4</span>
-                      <span class="text-blue-900 font-semibold">Safety Gate</span>
-                    </div>
+              <!-- Milestone Pipeline Gate Graphic -->
+              <div class="bg-[#F7F6F2] border border-[#E5E2DA] rounded-2xl p-5 mb-6 text-center">
+                <span class="text-xs font-serif text-ink-800 font-semibold block mb-4">Architecture & Gate Flow</span>
+                <div class="flex items-center justify-between max-w-md mx-auto text-[11px] font-medium text-ink-600 relative">
+                  <div class="absolute top-2.5 left-6 right-6 h-0.5 bg-[#E5E2DA] z-0"></div>
+                  
+                  <div class="relative z-10 flex flex-col items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">1</span>
+                    <span>Delimiters</span>
+                  </div>
+                  <div class="relative z-10 flex flex-col items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">2</span>
+                    <span>MCP Schema</span>
+                  </div>
+                  <div class="relative z-10 flex flex-col items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-white border-2 border-ink-400 flex items-center justify-center text-[9px] font-mono">3</span>
+                    <span>Caching</span>
+                  </div>
+                  <div class="relative z-10 flex flex-col items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-mono font-bold">4</span>
+                    <span class="text-blue-900 font-semibold">Safety Gate</span>
                   </div>
                 </div>
+              </div>
 
-                <!-- CTA Button -->
-                <div class="flex flex-wrap items-center gap-4">
-                  <button @click="navigate('practice')" class="px-6 py-3 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-xs sm:text-sm transition duration-150 shadow-sm">
-                    Continue practicing
-                  </button>
-                  <button @click="openTrackSelector = true" class="text-xs font-medium text-ink-700 hover:text-ink-900 underline transition">
-                    Choose another focus
-                  </button>
-                </div>
+              <!-- CTA Button -->
+              <div class="flex flex-wrap items-center gap-4">
+                <button @click="navigate('practice')" class="px-6 py-3 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-xs sm:text-sm transition duration-150 shadow-sm">
+                  Continue practicing
+                </button>
+                <button @click="openTrackSelector = true" class="text-xs font-medium text-ink-700 hover:text-ink-900 underline transition">
+                  Choose another focus
+                </button>
               </div>
             </div>
-
-            <!-- Right Column Widgets (4 cols) -->
-            <div class="lg:col-span-4 space-y-6">
-              
-              <!-- "Why this matters" Card -->
-              <div class="bg-[#FAF5EE] border border-[#EADBCE] rounded-3xl p-6 space-y-2">
-                <div class="flex items-center gap-2 text-amber-900 text-xs font-bold font-serif">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  Why this matters
-                </div>
-                <p class="text-xs text-ink-800 leading-relaxed">
-                  Robust Claude integration starts before production release. Explicit XML delimiters, least-privilege MCP scopes, and prompt caching are what make agent workflows fast, deterministic, and safe.
-                </p>
-              </div>
-
-              <!-- Session Focus Stats Card -->
-              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 space-y-4 shadow-sm">
-                <h3 class="text-base font-serif font-semibold text-ink-900">Session focus</h3>
-                
-                <!-- Daily Goal -->
-                <div class="space-y-2">
-                  <div class="flex items-center justify-between text-xs text-ink-600">
-                    <span>Today's goal</span>
-                    <span class="font-mono font-bold text-ink-900" x-text="todayAnswered + ' of 10'"></span>
-                  </div>
-                  <!-- 10 dots -->
-                  <div class="grid grid-cols-10 gap-1.5">
-                    <template x-for="i in 10" :key="i">
-                      <div class="h-2 rounded-full transition-all" :class="i <= todayAnswered ? 'bg-ink-900' : 'bg-[#EFECE6]'"></div>
-                    </template>
-                  </div>
-                </div>
-
-                <!-- Bank Covered -->
-                <div class="space-y-1.5 pt-2 border-t border-[#E5E2DA]">
-                  <div class="flex items-center justify-between text-xs text-ink-600">
-                    <span>Bank covered</span>
-                    <span class="font-mono font-bold text-ink-900" x-text="answeredCount + ' of ' + rawQuestions.length"></span>
-                  </div>
-                  <div class="w-full bg-[#EFECE6] h-2 rounded-full overflow-hidden">
-                    <div class="bg-ink-900 h-full transition-all" :style="'width: ' + Math.round((answeredCount / rawQuestions.length) * 100) + '%'"></div>
-                  </div>
-                </div>
-
-                <!-- Consecutive Days -->
-                <div class="flex items-center justify-between text-xs text-ink-600 pt-2 border-t border-[#E5E2DA]">
-                  <span>Consecutive days</span>
-                  <span class="font-mono font-bold text-ink-900">1 day</span>
-                </div>
-              </div>
-
-            </div>
-
           </div>
 
-          <!-- Anthropic Toolkit Visual Cards Section -->
-          <div class="space-y-4 pt-2">
-            <h2 class="text-xl font-serif font-semibold text-ink-900">Anthropic architecture toolkit</h2>
+          <!-- Right Column Widgets (4 cols) -->
+          <div class="lg:col-span-4 space-y-6">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              <!-- Card 1: Levels of human oversight / autonomy -->
-              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
-                <div>
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
-                    </span>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Levels of human oversight</h3>
-                  </div>
-                  <p class="text-xs text-ink-600 leading-relaxed">
-                    Three postures in descending order of human involvement. Choosing one is a judgement about how reversible a wrong outcome is — not about how confident the model sounds.
-                  </p>
-                </div>
-
-                <div class="pt-4 flex items-end justify-between gap-3 text-center text-[10px] font-medium text-ink-700">
-                  <div class="flex-1 space-y-1">
-                    <div class="h-8 bg-[#D4DFD7] rounded-lg"></div>
-                    <span>Assist</span>
-                  </div>
-                  <div class="flex-1 space-y-1">
-                    <div class="h-12 bg-[#B7CBBF] rounded-lg"></div>
-                    <span>Review</span>
-                  </div>
-                  <div class="flex-1 space-y-1">
-                    <div class="h-16 bg-[#8FAEA0] rounded-lg"></div>
-                    <span class="font-bold text-ink-900">Intervene</span>
-                  </div>
-                </div>
+            <!-- "Why this matters" Card -->
+            <div class="bg-[#FAF5EE] border border-[#EADBCE] rounded-3xl p-6 space-y-2">
+              <div class="flex items-center gap-2 text-amber-900 text-xs font-bold font-serif">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Why this matters
               </div>
-
-              <!-- Card 2: MCP Topology & Responsibility Map -->
-              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
-                <div>
-                  <div class="flex items-center gap-2 mb-2">
-                    <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    </span>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Model Context Protocol topology</h3>
-                  </div>
-                  <p class="text-xs text-ink-600 leading-relaxed">
-                    How MCP clients connect Claude to isolated servers exposing Resources, Prompts, and Tools with standard security boundaries.
-                  </p>
-                </div>
-
-                <div class="pt-4 flex items-center justify-center gap-2 text-center text-[10px] font-medium">
-                  <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">Host (Client)</span>
-                  <span class="text-ink-400">↔</span>
-                  <span class="px-2.5 py-1 rounded bg-blue-100 border border-blue-300 text-blue-900 font-bold">Claude (LLM)</span>
-                  <span class="text-ink-400">↔</span>
-                  <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">MCP Server</span>
-                </div>
-              </div>
-
+              <p class="text-xs text-ink-800 leading-relaxed">
+                Robust Claude integration starts before production release. Explicit XML delimiters, least-privilege MCP scopes, and prompt caching are what make agent workflows fast, deterministic, and safe.
+              </p>
             </div>
+
+            <!-- Session Focus Stats Card -->
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 space-y-4 shadow-sm">
+              <h3 class="text-base font-serif font-semibold text-ink-900">Session focus</h3>
+              
+              <!-- Daily Goal -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs text-ink-600">
+                  <span>Today's goal</span>
+                  <span class="font-mono font-bold text-ink-900" x-text="todayAnswered + ' of 10'"></span>
+                </div>
+                <!-- 10 dots -->
+                <div class="grid grid-cols-10 gap-1.5">
+                  <template x-for="i in 10" :key="i">
+                    <div class="h-2 rounded-full transition-all" :class="i <= todayAnswered ? 'bg-ink-900' : 'bg-[#EFECE6]'"></div>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Bank Covered -->
+              <div class="space-y-1.5 pt-2 border-t border-[#E5E2DA]">
+                <div class="flex items-center justify-between text-xs text-ink-600">
+                  <span>Bank covered</span>
+                  <span class="font-mono font-bold text-ink-900" x-text="answeredCount + ' of ' + rawQuestions.length"></span>
+                </div>
+                <div class="w-full bg-[#EFECE6] h-2 rounded-full overflow-hidden">
+                  <div class="bg-ink-900 h-full transition-all" :style="'width: ' + (rawQuestions.length ? Math.round((answeredCount / rawQuestions.length) * 100) : 0) + '%'"></div>
+                </div>
+              </div>
+
+              <!-- Consecutive Days -->
+              <div class="flex items-center justify-between text-xs text-ink-600 pt-2 border-t border-[#E5E2DA]">
+                <span>Consecutive days</span>
+                <span class="font-mono font-bold text-ink-900">1 day</span>
+              </div>
+            </div>
+
           </div>
 
         </div>
-      </template>
+
+        <!-- Anthropic Toolkit Visual Cards Section -->
+        <div class="space-y-4 pt-2">
+          <h2 class="text-xl font-serif font-semibold text-ink-900">Anthropic architecture toolkit</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Card 1: Levels of human oversight / autonomy -->
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                  </span>
+                  <h3 class="font-serif text-base font-semibold text-ink-900">Levels of human oversight</h3>
+                </div>
+                <p class="text-xs text-ink-600 leading-relaxed">
+                  Three postures in descending order of human involvement. Choosing one is a judgement about how reversible a wrong outcome is — not about how confident the model sounds.
+                </p>
+              </div>
+
+              <div class="pt-4 flex items-end justify-between gap-3 text-center text-[10px] font-medium text-ink-700">
+                <div class="flex-1 space-y-1">
+                  <div class="h-8 bg-[#D4DFD7] rounded-lg"></div>
+                  <span>Assist</span>
+                </div>
+                <div class="flex-1 space-y-1">
+                  <div class="h-12 bg-[#B7CBBF] rounded-lg"></div>
+                  <span>Review</span>
+                </div>
+                <div class="flex-1 space-y-1">
+                  <div class="h-16 bg-[#8FAEA0] rounded-lg"></div>
+                  <span class="font-bold text-ink-900">Intervene</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: MCP Topology & Responsibility Map -->
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-7 shadow-sm space-y-4 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="w-7 h-7 rounded-lg bg-ink-900 text-white flex items-center justify-center text-xs">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  </span>
+                  <h3 class="font-serif text-base font-semibold text-ink-900">Model Context Protocol topology</h3>
+                </div>
+                <p class="text-xs text-ink-600 leading-relaxed">
+                  How MCP clients connect Claude to isolated servers exposing Resources, Prompts, and Tools with standard security boundaries.
+                </p>
+              </div>
+
+              <div class="pt-4 flex items-center justify-center gap-2 text-center text-[10px] font-medium">
+                <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">Host (Client)</span>
+                <span class="text-ink-400">↔</span>
+                <span class="px-2.5 py-1 rounded bg-blue-100 border border-blue-300 text-blue-900 font-bold">Claude (LLM)</span>
+                <span class="text-ink-400">↔</span>
+                <span class="px-2.5 py-1 rounded bg-[#EFECE6] border border-[#E5E2DA] text-ink-800">MCP Server</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
 
       <!-- ==================== TAB 2: PRACTICE / STUDY (EXACT MATCH TO REFERENCE SCREENSHOT 2) ==================== -->
-      <template x-if="currentTab === 'practice'">
-        <div class="space-y-8 max-w-4xl">
+      <div x-show="currentTab === 'practice'" class="space-y-8 max-w-4xl">
+        
+        <!-- Study Mode Overview (Domain Selection Screen) -->
+        <div x-show="!activeQuestionView" class="space-y-8">
           
-          <!-- Study Mode Overview (Domain Selection Screen) -->
-          <template x-if="!activeQuestionView">
-            <div class="space-y-8">
+          <!-- Header Section -->
+          <div class="space-y-3">
+            <h1 class="text-3xl sm:text-4xl font-serif font-normal text-ink-900">Study</h1>
+            <p class="text-sm font-serif text-ink-600">Anthropic Claude Preparation · 100 scenarios, all free</p>
+            
+            <p class="text-xs text-ink-700 leading-relaxed max-w-3xl pt-1">
+              The five domains below follow Anthropic's Claude Engineering, Tool Use (MCP), Architecture, and AI Safety Frameworks. Every track contains 20 comprehensive scenario-based questions with in-depth rationales and distractor analyses. Every scenario is original material written for this track. Anthropic Claude is a trademark of Anthropic PBC; this product is an independent educational training tool.
+            </p>
+          </div>
+
+          <!-- Authority & Meta Table (Matches Screenshot 2) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-white border border-[#E5E2DA] rounded-2xl text-[11px]">
+            <div>
+              <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">AUTHORITY</div>
+              <div class="font-semibold text-ink-900 mt-0.5">ANTHROPIC CLAUDE DOCS</div>
+            </div>
+            <div>
+              <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">VERSION</div>
+              <div class="font-semibold text-ink-900 mt-0.5">V3.5 / MCP 2026</div>
+            </div>
+            <div>
+              <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">CHECKED</div>
+              <div class="font-semibold text-ink-900 mt-0.5">29 AUGUST 2026</div>
+            </div>
+            <div>
+              <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">COVERAGE</div>
+              <div class="font-semibold text-ink-900 mt-0.5">5/5 TRACKS (100 SCENARIOS)</div>
+            </div>
+          </div>
+
+          <!-- Session Length Buttons (Matches Screenshot 2) -->
+          <div class="space-y-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">SESSION LENGTH</span>
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <button @click="startSession(5)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">5 questions</button>
+              <button @click="startSession(10)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">10 questions</button>
+              <button @click="startSession(20)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">20 questions</button>
+              <button @click="startSession('all')" class="px-5 py-2 bg-ink-900 hover:bg-ink-800 text-white rounded-xl font-medium transition">Continue</button>
+            </div>
+          </div>
+
+          <!-- Domain Cards Grid (Matches Screenshot 2) -->
+          <div class="space-y-3 pt-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">BY DOMAIN</span>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               
-              <!-- Header Section -->
-              <div class="space-y-3">
-                <h1 class="text-3xl sm:text-4xl font-serif font-normal text-ink-900">Study</h1>
-                <p class="text-sm font-serif text-ink-600">Anthropic Claude Preparation · 100 scenarios, all free</p>
-                
-                <p class="text-xs text-ink-700 leading-relaxed max-w-3xl pt-1">
-                  The five domains below follow Anthropic's Claude Engineering, Tool Use (MCP), Architecture, and AI Safety Frameworks. Every track contains 20 comprehensive scenario-based questions with in-depth rationales and distractor analyses. Every scenario is original material written for this track. Anthropic Claude is a trademark of Anthropic PBC; this product is an independent educational training tool.
-                </p>
-              </div>
-
-              <!-- Authority & Meta Table (Matches Screenshot 2) -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-white border border-[#E5E2DA] rounded-2xl text-[11px]">
-                <div>
-                  <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">AUTHORITY</div>
-                  <div class="font-semibold text-ink-900 mt-0.5">ANTHROPIC CLAUDE DOCS</div>
+              <!-- Domain 1 Card -->
+              <div @click="selectAndStartTrack('Claude Certified Prompt Engineer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-slate-800 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-ink-500 uppercase tracking-wider">DOMAIN I</span>
+                  <span class="w-6 h-6 rounded-full bg-[#F7F6F2] text-ink-800 text-xs font-mono font-bold flex items-center justify-center">20</span>
                 </div>
-                <div>
-                  <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">VERSION</div>
-                  <div class="font-semibold text-ink-900 mt-0.5">V3.5 / MCP 2026</div>
-                </div>
-                <div>
-                  <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">CHECKED</div>
-                  <div class="font-semibold text-ink-900 mt-0.5">29 AUGUST 2026</div>
-                </div>
-                <div>
-                  <div class="font-bold text-ink-500 uppercase text-[9px] tracking-wider">COVERAGE</div>
-                  <div class="font-semibold text-ink-900 mt-0.5">5/5 TRACKS (100 SCENARIOS)</div>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Prompt Engineer</h3>
+                <div class="space-y-1">
+                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-slate-800 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Prompt Engineer') + '%'"></div>
+                  </div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Prompt Engineer')"></div>
                 </div>
               </div>
 
-              <!-- Session Length Buttons (Matches Screenshot 2) -->
-              <div class="space-y-2">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">SESSION LENGTH</span>
-                <div class="flex flex-wrap items-center gap-2 text-xs">
-                  <button @click="startSession(5)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">5 questions</button>
-                  <button @click="startSession(10)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">10 questions</button>
-                  <button @click="startSession(20)" class="px-4 py-2 bg-white border border-[#E5E2DA] hover:border-ink-900 rounded-xl font-medium text-ink-900 transition">20 questions</button>
-                  <button @click="startSession('all')" class="px-5 py-2 bg-ink-900 hover:bg-ink-800 text-white rounded-xl font-medium transition">Continue</button>
+              <!-- Domain 2 Card -->
+              <div @click="selectAndStartTrack('Claude Certified Application Developer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-blue-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">DOMAIN II</span>
+                  <span class="w-6 h-6 rounded-full bg-blue-50 text-blue-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
+                </div>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Application Developer</h3>
+                <div class="space-y-1">
+                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-blue-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Application Developer') + '%'"></div>
+                  </div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Application Developer')"></div>
                 </div>
               </div>
 
-              <!-- Domain Cards Grid (Matches Screenshot 2) -->
-              <div class="space-y-3 pt-2">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-ink-500 block">BY DOMAIN</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  
-                  <!-- Domain 1 Card -->
-                  <div @click="selectAndStartTrack('Claude Certified Prompt Engineer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-slate-800 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-bold text-ink-500 uppercase tracking-wider">DOMAIN I</span>
-                      <span class="w-6 h-6 rounded-full bg-[#F7F6F2] text-ink-800 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                    </div>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Prompt Engineer</h3>
-                    <div class="space-y-1">
-                      <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-slate-800 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Prompt Engineer') + '%'"></div>
-                      </div>
-                      <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Prompt Engineer')"></div>
-                    </div>
+              <!-- Domain 3 Card -->
+              <div @click="selectAndStartTrack('Claude Agent & Tool Use Specialist (MCP)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-amber-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">DOMAIN III</span>
+                  <span class="w-6 h-6 rounded-full bg-amber-50 text-amber-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
+                </div>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Agent & Tool Use Specialist (MCP)</h3>
+                <div class="space-y-1">
+                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-amber-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Agent & Tool Use Specialist (MCP)') + '%'"></div>
                   </div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Agent & Tool Use Specialist (MCP)')"></div>
+                </div>
+              </div>
 
-                  <!-- Domain 2 Card -->
-                  <div @click="selectAndStartTrack('Claude Certified Application Developer')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-blue-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">DOMAIN II</span>
-                      <span class="w-6 h-6 rounded-full bg-blue-50 text-blue-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                    </div>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Claude Certified Application Developer</h3>
-                    <div class="space-y-1">
-                      <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-blue-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Certified Application Developer') + '%'"></div>
-                      </div>
-                      <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Certified Application Developer')"></div>
-                    </div>
+              <!-- Domain 4 Card -->
+              <div @click="selectAndStartTrack('Claude AI Solutions Architect')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-emerald-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">DOMAIN IV</span>
+                  <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
+                </div>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude AI Solutions Architect</h3>
+                <div class="space-y-1">
+                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-emerald-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude AI Solutions Architect') + '%'"></div>
                   </div>
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude AI Solutions Architect')"></div>
+                </div>
+              </div>
 
-                  <!-- Domain 3 Card -->
-                  <div @click="selectAndStartTrack('Claude Agent & Tool Use Specialist (MCP)')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-amber-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">DOMAIN III</span>
-                      <span class="w-6 h-6 rounded-full bg-amber-50 text-amber-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                    </div>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Claude Agent & Tool Use Specialist (MCP)</h3>
-                    <div class="space-y-1">
-                      <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-amber-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Agent & Tool Use Specialist (MCP)') + '%'"></div>
-                      </div>
-                      <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Agent & Tool Use Specialist (MCP)')"></div>
-                    </div>
+              <!-- Domain 5 Card -->
+              <div @click="selectAndStartTrack('Claude Safety, Governance & Red Teaming')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-rose-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3 md:col-span-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">DOMAIN V</span>
+                  <span class="w-6 h-6 rounded-full bg-rose-50 text-rose-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
+                </div>
+                <h3 class="font-serif text-base font-semibold text-ink-900">Claude Safety, Governance & Red Teaming</h3>
+                <div class="space-y-1">
+                  <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-rose-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Safety, Governance & Red Teaming') + '%'"></div>
                   </div>
-
-                  <!-- Domain 4 Card -->
-                  <div @click="selectAndStartTrack('Claude AI Solutions Architect')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-emerald-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">DOMAIN IV</span>
-                      <span class="w-6 h-6 rounded-full bg-emerald-50 text-emerald-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                    </div>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Claude AI Solutions Architect</h3>
-                    <div class="space-y-1">
-                      <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-emerald-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude AI Solutions Architect') + '%'"></div>
-                      </div>
-                      <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude AI Solutions Architect')"></div>
-                    </div>
-                  </div>
-
-                  <!-- Domain 5 Card -->
-                  <div @click="selectAndStartTrack('Claude Safety, Governance & Red Teaming')" class="bg-white border border-[#E5E2DA] border-l-4 border-l-rose-600 rounded-2xl p-5 hover:border-ink-900 cursor-pointer transition shadow-sm space-y-3 md:col-span-2">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">DOMAIN V</span>
-                      <span class="w-6 h-6 rounded-full bg-rose-50 text-rose-900 text-xs font-mono font-bold flex items-center justify-center">20</span>
-                    </div>
-                    <h3 class="font-serif text-base font-semibold text-ink-900">Claude Safety, Governance & Red Teaming</h3>
-                    <div class="space-y-1">
-                      <div class="w-full bg-[#EFECE6] h-1.5 rounded-full overflow-hidden">
-                        <div class="bg-rose-600 h-full transition-all" :style="'width: ' + getTrackPercentage('Claude Safety, Governance & Red Teaming') + '%'"></div>
-                      </div>
-                      <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Safety, Governance & Red Teaming')"></div>
-                    </div>
-                  </div>
-
+                  <div class="text-[11px] text-ink-500" x-text="getTrackProgressText('Claude Safety, Governance & Red Teaming')"></div>
                 </div>
               </div>
 
             </div>
-          </template>
-
-          <!-- Active Question Practice View -->
-          <template x-if="activeQuestionView && currentQuestion">
-            <div class="space-y-6">
-              
-              <!-- Back to Domains Header & Stats Bar -->
-              <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-2xl shadow-sm text-xs">
-                <button @click="activeQuestionView = false" class="text-xs font-medium text-ink-600 hover:text-ink-900 flex items-center gap-1">
-                  ← All Domains
-                </button>
-
-                <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
-                  <span>Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
-                  <span>Score: <strong class="text-emerald-700" x-text="score + '/' + answeredCount"></strong></span>
-                </div>
-              </div>
-
-              <!-- Question Card -->
-              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                
-                <!-- Meta Tags -->
-                <div class="flex items-center justify-between text-xs text-ink-500 pb-2 border-b border-[#E5E2DA]">
-                  <div class="flex items-center gap-2">
-                    <span class="font-serif font-semibold text-ink-800" x-text="currentQuestion.track"></span>
-                    <span>•</span>
-                    <span x-text="currentQuestion.domain"></span>
-                  </div>
-                  <button @click="toggleBookmark(currentQuestion.id)" class="hover:text-ink-900 transition flex items-center gap-1 text-xs">
-                    <span x-text="isBookmarked(currentQuestion.id) ? '★ Bookmarked' : '☆ Bookmark'"></span>
-                  </button>
-                </div>
-
-                <!-- Scenario -->
-                <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
-
-                <!-- Prompt Question -->
-                <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
-
-                <!-- Options -->
-                <div class="space-y-3">
-                  <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
-                    <button 
-                      @click="selectOption(idx)"
-                      :class="{
-                        'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] === undefined,
-                        'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex),
-                        'border-rose-300 bg-rose-50 text-rose-950': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex)
-                      }"
-                      class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
-                      <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
-                      <span class="leading-relaxed" x-text="opt"></span>
-                    </button>
-                  </template>
-                </div>
-
-                <!-- Study Feedback & Distractor Breakdown -->
-                <template x-if="userAnswers[currentQuestion.id] !== undefined">
-                  <div class="pt-6 border-t border-[#E5E2DA] space-y-4">
-                    <div :class="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
-                      <strong class="block mb-1 font-semibold" x-text="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? '✓ Correct Answer' : '✕ Incorrect'"></strong>
-                      <span x-text="currentQuestion.explanation"></span>
-                    </div>
-
-                    <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA] text-xs space-y-2">
-                      <span class="font-bold text-ink-600 uppercase text-[10px] tracking-wider block mb-1">Option Analysis</span>
-                      <template x-for="(dText, dIdx) in currentQuestion.distractorAnalysis" :key="dIdx">
-                        <div class="text-ink-700">
-                          <strong class="text-ink-900" x-text="'Option ' + String.fromCharCode(65 + parseInt(dIdx)) + ': '"></strong>
-                          <span x-text="dText"></span>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </template>
-
-                <!-- Navigation Footer -->
-                <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
-                  <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
-                    ← Previous
-                  </button>
-                  <span class="text-ink-500 font-mono" x-text="(currentIndex + 1) + ' / ' + activeQuestions.length"></span>
-                  <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
-                    Next →
-                  </button>
-                </div>
-              </div>
-
-              <!-- Question Jump Map -->
-              <div class="bg-white border border-[#E5E2DA] rounded-2xl p-4 shadow-sm space-y-3">
-                <div class="flex items-center justify-between text-xs text-ink-600">
-                  <span class="font-semibold uppercase text-[10px] tracking-wider">Question Map</span>
-                  <span x-text="answeredCount + ' of ' + activeQuestions.length + ' completed'"></span>
-                </div>
-                <div class="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
-                  <template x-for="(q, qIndex) in activeQuestions" :key="q.id">
-                    <button 
-                      @click="jumpToQuestion(qIndex)"
-                      :class="{
-                        'border-ink-900 font-bold bg-[#EFECE6]': currentIndex === qIndex,
-                        'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex),
-                        'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex),
-                        'bg-[#F7F6F2] text-ink-500 border-[#E5E2DA]': userAnswers[q.id] === undefined
-                      }"
-                      class="h-8 rounded border text-xs font-mono transition flex items-center justify-center relative">
-                      <span x-text="qIndex + 1"></span>
-                      <template x-if="isBookmarked(q.id)">
-                        <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                      </template>
-                    </button>
-                  </template>
-                </div>
-              </div>
-
-            </div>
-          </template>
+          </div>
 
         </div>
-      </template>
 
-      <!-- ==================== TAB 3: REVIEW (/review/) ==================== -->
-      <template x-if="currentTab === 'review'">
-        <div class="space-y-8 max-w-3xl">
-          <div>
-            <h1 class="text-3xl font-serif text-ink-900">Review Queue</h1>
-            <p class="text-xs text-ink-600 mt-1">Review items you missed or bookmarked during your practice sessions.</p>
-          </div>
+        <!-- Active Question Practice View -->
+        <div x-show="activeQuestionView && currentQuestion" class="space-y-6">
+          
+          <!-- Back to Domains Header & Stats Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-4 bg-white border border-[#E5E2DA] p-4 rounded-2xl shadow-sm text-xs">
+            <button @click="activeQuestionView = false" class="text-xs font-medium text-ink-600 hover:text-ink-900 flex items-center gap-1">
+              ← All Domains
+            </button>
 
-          <div class="flex items-center gap-2 border-b border-[#E5E2DA] pb-3 text-xs">
-            <button @click="reviewFilter = 'all'" :class="reviewFilter === 'all' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-              All Items (<span x-text="getReviewQuestions().length"></span>)
-            </button>
-            <button @click="reviewFilter = 'missed'" :class="reviewFilter === 'missed' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-              Missed (<span x-text="getMissedCount()"></span>)
-            </button>
-            <button @click="reviewFilter = 'bookmarks'" :class="reviewFilter === 'bookmarks' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
-              Bookmarked (<span x-text="bookmarks.length"></span>)
-            </button>
-          </div>
-
-          <template x-if="getReviewQuestions().length === 0">
-            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-12 text-center space-y-3">
-              <div class="text-3xl">🎉</div>
-              <h3 class="text-base font-serif font-semibold text-ink-900">Review queue is empty</h3>
-              <p class="text-xs text-ink-600 max-w-sm mx-auto">No missed or flagged questions recorded yet.</p>
-              <button @click="navigate('practice')" class="px-4 py-2 bg-ink-900 text-white rounded-lg text-xs font-medium mt-2">Go to Practice Mode</button>
+            <div class="flex items-center gap-4 text-ink-600 font-mono text-xs">
+              <span>Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="activeQuestions.length"></span></span>
+              <span>Score: <strong class="text-emerald-700" x-text="score + '/' + answeredCount"></strong></span>
             </div>
-          </template>
+          </div>
 
-          <div class="space-y-4">
-            <template x-for="q in getReviewQuestions()" :key="q.id">
-              <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 shadow-sm space-y-3">
-                <div class="flex items-center justify-between text-xs text-ink-500">
-                  <span class="font-serif font-semibold text-ink-800" x-text="q.track + ' • ' + q.domain"></span>
-                  <div class="flex items-center gap-2">
-                    <template x-if="userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex">
-                      <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 font-medium">Missed</span>
-                    </template>
-                    <template x-if="isBookmarked(q.id)">
-                      <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-medium">★ Saved</span>
+          <!-- Question Card -->
+          <template x-if="currentQuestion">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              
+              <!-- Meta Tags -->
+              <div class="flex items-center justify-between text-xs text-ink-500 pb-2 border-b border-[#E5E2DA]">
+                <div class="flex items-center gap-2">
+                  <span class="font-serif font-semibold text-ink-800" x-text="currentQuestion.track"></span>
+                  <span>•</span>
+                  <span x-text="currentQuestion.domain"></span>
+                </div>
+                <button @click="toggleBookmark(currentQuestion.id)" class="hover:text-ink-900 transition flex items-center gap-1 text-xs">
+                  <span x-text="isBookmarked(currentQuestion.id) ? '★ Bookmarked' : '☆ Bookmark'"></span>
+                </button>
+              </div>
+
+              <!-- Scenario -->
+              <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentQuestion.scenario"></div>
+
+              <!-- Prompt Question -->
+              <div class="text-sm font-medium text-ink-900" x-text="currentQuestion.question"></div>
+
+              <!-- Options -->
+              <div class="space-y-3">
+                <template x-for="(opt, idx) in currentQuestion.options" :key="idx">
+                  <button 
+                    @click="selectOption(idx)"
+                    :class="{
+                      'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': userAnswers[currentQuestion.id] === undefined,
+                      'border-emerald-600 bg-emerald-50 text-emerald-950 font-medium': (userAnswers[currentQuestion.id] !== undefined && idx === currentQuestion.correctIndex),
+                      'border-rose-300 bg-rose-50 text-rose-950': (userAnswers[currentQuestion.id] === idx && idx !== currentQuestion.correctIndex)
+                    }"
+                    class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
+                    <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
+                    <span class="leading-relaxed" x-text="opt"></span>
+                  </button>
+                </template>
+              </div>
+
+              <!-- Study Feedback & Distractor Breakdown -->
+              <template x-if="userAnswers[currentQuestion.id] !== undefined">
+                <div class="pt-6 border-t border-[#E5E2DA] space-y-4">
+                  <div :class="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'" class="p-4 rounded-xl border text-xs sm:text-sm leading-relaxed">
+                    <strong class="block mb-1 font-semibold" x-text="userAnswers[currentQuestion.id] === currentQuestion.correctIndex ? '✓ Correct Answer' : '✕ Incorrect'"></strong>
+                    <span x-text="currentQuestion.explanation"></span>
+                  </div>
+
+                  <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA] text-xs space-y-2">
+                    <span class="font-bold text-ink-600 uppercase text-[10px] tracking-wider block mb-1">Option Analysis</span>
+                    <template x-for="(dText, dIdx) in currentQuestion.distractorAnalysis" :key="dIdx">
+                      <div class="text-ink-700">
+                        <strong class="text-ink-900" x-text="'Option ' + String.fromCharCode(65 + parseInt(dIdx)) + ': '"></strong>
+                        <span x-text="dText"></span>
+                      </div>
                     </template>
                   </div>
                 </div>
-                <div class="text-sm font-serif text-ink-900" x-text="q.scenario"></div>
-                <div class="text-xs font-medium text-ink-800" x-text="q.question"></div>
-                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
-                  <strong>Correct Choice:</strong> <span x-text="q.options[q.correctIndex]"></span>
+              </template>
+
+              <!-- Navigation Footer -->
+              <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
+                <button @click="prevQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
+                  ← Previous
+                </button>
+                <span class="text-ink-500 font-mono" x-text="(currentIndex + 1) + ' / ' + activeQuestions.length"></span>
+                <button @click="nextQuestion()" :disabled="currentIndex >= activeQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
+                  Next →
+                </button>
+              </div>
+            </div>
+          </template>
+
+          <!-- Question Jump Map -->
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-4 shadow-sm space-y-3">
+            <div class="flex items-center justify-between text-xs text-ink-600">
+              <span class="font-semibold uppercase text-[10px] tracking-wider">Question Map</span>
+              <span x-text="answeredCount + ' of ' + activeQuestions.length + ' completed'"></span>
+            </div>
+            <div class="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
+              <template x-for="(q, qIndex) in activeQuestions" :key="q.id">
+                <button 
+                  @click="jumpToQuestion(qIndex)"
+                  :class="{
+                    'border-ink-900 font-bold bg-[#EFECE6]': currentIndex === qIndex,
+                    'bg-emerald-100 text-emerald-900 border-emerald-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] === q.correctIndex),
+                    'bg-rose-100 text-rose-900 border-rose-300': (userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex),
+                    'bg-[#F7F6F2] text-ink-500 border-[#E5E2DA]': userAnswers[q.id] === undefined
+                  }"
+                  class="h-8 rounded border text-xs font-mono transition flex items-center justify-center relative">
+                  <span x-text="qIndex + 1"></span>
+                  <template x-if="isBookmarked(q.id)">
+                    <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                  </template>
+                </button>
+              </template>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ==================== TAB 3: REVIEW (/review/) ==================== -->
+      <div x-show="currentTab === 'review'" class="space-y-8 max-w-3xl">
+        <div>
+          <h1 class="text-3xl font-serif text-ink-900">Review Queue</h1>
+          <p class="text-xs text-ink-600 mt-1">Review items you missed or bookmarked during your practice sessions.</p>
+        </div>
+
+        <div class="flex items-center gap-2 border-b border-[#E5E2DA] pb-3 text-xs">
+          <button @click="reviewFilter = 'all'" :class="reviewFilter === 'all' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+            All Items (<span x-text="getReviewQuestions().length"></span>)
+          </button>
+          <button @click="reviewFilter = 'missed'" :class="reviewFilter === 'missed' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+            Missed (<span x-text="getMissedCount()"></span>)
+          </button>
+          <button @click="reviewFilter = 'bookmarks'" :class="reviewFilter === 'bookmarks' ? 'font-semibold text-ink-900 border-b-2 border-ink-900' : 'text-ink-600'" class="pb-1.5 px-2">
+            Bookmarked (<span x-text="bookmarks.length"></span>)
+          </button>
+        </div>
+
+        <template x-if="getReviewQuestions().length === 0">
+          <div class="bg-white border border-[#E5E2DA] rounded-3xl p-12 text-center space-y-3">
+            <div class="text-3xl">🎉</div>
+            <h3 class="text-base font-serif font-semibold text-ink-900">Review queue is empty</h3>
+            <p class="text-xs text-ink-600 max-w-sm mx-auto">No missed or flagged questions recorded yet.</p>
+            <button @click="navigate('practice')" class="px-4 py-2 bg-ink-900 text-white rounded-lg text-xs font-medium mt-2">Go to Practice Mode</button>
+          </div>
+        </template>
+
+        <div class="space-y-4">
+          <template x-for="q in getReviewQuestions()" :key="q.id">
+            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-6 shadow-sm space-y-3">
+              <div class="flex items-center justify-between text-xs text-ink-500">
+                <span class="font-serif font-semibold text-ink-800" x-text="q.track + ' • ' + q.domain"></span>
+                <div class="flex items-center gap-2">
+                  <template x-if="userAnswers[q.id] !== undefined && userAnswers[q.id] !== q.correctIndex">
+                    <span class="px-2 py-0.5 rounded bg-rose-50 text-rose-800 font-medium">Missed</span>
+                  </template>
+                  <template x-if="isBookmarked(q.id)">
+                    <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 font-medium">★ Saved</span>
+                  </template>
+                </div>
+              </div>
+              <div class="text-sm font-serif text-ink-900" x-text="q.scenario"></div>
+              <div class="text-xs font-medium text-ink-800" x-text="q.question"></div>
+              <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+                <strong>Correct Choice:</strong> <span x-text="q.options[q.correctIndex]"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- ==================== TAB 4: EXAM (EXACT MATCH TO REFERENCE SCREENSHOT 1) ==================== -->
+      <div x-show="currentTab === 'exam'" class="space-y-8 max-w-3xl">
+        
+        <!-- Exam Setup Card (Matches Screenshot 1) -->
+        <div x-show="!examInProgress && !examFinished" class="bg-white border border-[#E5E2DA] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
+          <div>
+            <h1 class="text-3xl font-serif text-ink-900">Timed Mock Exam</h1>
+            <p class="text-xs text-ink-600 mt-1">Full certification simulation with 90 seconds per question and comprehensive final score report.</p>
+          </div>
+
+          <div class="space-y-5 max-w-md text-xs">
+            <div>
+              <label class="block font-semibold text-ink-700 mb-1.5">Select Track:</label>
+              <select x-model="selectedExamTrack" @change="filterExamTrack(selectedExamTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-xl p-3 text-xs text-ink-900 font-medium focus:outline-none focus:border-ink-900">
+                <option value="all">All Certifications Combined (100 Questions)</option>
+                <template x-for="track in tracks" :key="track">
+                  <option :value="track" x-text="track + ' (20 Questions)'"></option>
+                </template>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-semibold text-ink-700 mb-1.5">Time Allowance:</label>
+              <div class="p-3 bg-[#F7F6F2] border border-[#E5E2DA] rounded-xl font-mono text-ink-900 text-xs" x-text="getExamTimeAllowanceText()"></div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button @click="startExam()" class="px-7 py-3.5 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-xs sm:text-sm transition shadow-sm">
+              Begin Mock Exam
+            </button>
+          </div>
+        </div>
+
+        <!-- Exam in Progress Screen -->
+        <div x-show="examInProgress && !examFinished" class="space-y-6">
+          <div class="flex items-center justify-between bg-white border border-[#E5E2DA] p-4 rounded-2xl text-xs font-mono">
+            <span class="text-ink-600">Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="examQuestions.length"></span></span>
+            <span class="bg-[#EFECE6] px-3 py-1.5 rounded-lg text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
+            <button @click="finishExam()" class="px-3.5 py-1.5 bg-ink-900 text-white rounded-lg font-medium text-xs">Submit</button>
+          </div>
+
+          <template x-if="currentExamQuestion">
+            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentExamQuestion.scenario"></div>
+              <div class="text-sm font-medium text-ink-900" x-text="currentExamQuestion.question"></div>
+
+              <div class="space-y-2.5">
+                <template x-for="(opt, idx) in currentExamQuestion.options" :key="idx">
+                  <button 
+                    @click="selectExamOption(idx)"
+                    :class="{
+                      'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': examAnswers[currentExamQuestion.id] !== idx,
+                      'border-ink-900 bg-[#EFECE6] text-ink-900 font-medium': examAnswers[currentExamQuestion.id] === idx
+                    }"
+                    class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
+                    <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
+                    <span class="leading-relaxed" x-text="opt"></span>
+                  </button>
+                </template>
+              </div>
+
+              <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
+                <button @click="prevExamQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
+                  ← Previous
+                </button>
+                <button @click="nextExamQuestion()" :disabled="currentIndex >= examQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
+                  Next →
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Exam Finished Result Card -->
+        <div x-show="examFinished" class="bg-white border border-[#E5E2DA] rounded-3xl p-8 text-center space-y-6 shadow-sm">
+          <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
+          <p class="text-xs text-ink-600">Performance report for <span class="font-semibold text-ink-900" x-text="selectedExamTrack === 'all' ? 'All Certifications' : selectedExamTrack"></span></p>
+          
+          <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculateExamPercentage() + '%'"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
+            </div>
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + examQuestions.length"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
+            </div>
+            <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
+              <div :class="calculateExamPercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculateExamPercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
+              <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Cutoff (75%)</div>
+            </div>
+          </div>
+          <div class="flex justify-center gap-3">
+            <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-xl">Retake Exam</button>
+            <button @click="navigate('practice')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-xl hover:bg-[#E5E2DA]">Review in Study Mode</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==================== TAB 5: PROGRESS (/progress/) ==================== -->
+      <div x-show="currentTab === 'progress'" class="space-y-8 max-w-4xl">
+        <div>
+          <h1 class="text-3xl font-serif text-ink-900">Your Progress & Mastery</h1>
+          <p class="text-xs text-ink-600 mt-1">Detailed breakdown of question coverage and domain accuracy across 100 questions.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+            <span class="text-[10px] uppercase font-bold text-ink-500">Bank Coverage</span>
+            <div class="text-2xl font-serif font-bold text-ink-900 mt-1" x-text="answeredCount + ' / ' + rawQuestions.length"></div>
+            <div class="text-xs text-ink-600 mt-1" x-text="(rawQuestions.length ? Math.round((answeredCount / rawQuestions.length) * 100) : 0) + '% completed'"></div>
+          </div>
+
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+            <span class="text-[10px] uppercase font-bold text-ink-500">Overall Accuracy</span>
+            <div class="text-2xl font-serif font-bold text-emerald-700 mt-1" x-text="calculateAccuracy() + '%'"></div>
+            <div class="text-xs text-ink-600 mt-1" x-text="score + ' correct answers'"></div>
+          </div>
+
+          <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
+            <span class="text-[10px] uppercase font-bold text-ink-500">Flagged For Review</span>
+            <div class="text-2xl font-serif font-bold text-amber-700 mt-1" x-text="getReviewCount() + ' items'"></div>
+            <div class="text-xs text-ink-600 mt-1" x-text="bookmarks.length + ' bookmarked'"></div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+          <h2 class="text-xl font-serif text-ink-900">Track-by-Track Mastery (20 Questions Each)</h2>
+          <div class="space-y-5">
+            <template x-for="track in tracks" :key="track">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-medium text-ink-900 font-serif" x-text="track"></span>
+                  <span class="font-mono text-ink-600" x-text="getTrackScore(track)"></span>
+                </div>
+                <div class="w-full bg-[#EFECE6] h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-ink-900 h-full transition-all duration-300" :style="'width: ' + getTrackPercentage(track) + '%'"></div>
                 </div>
               </div>
             </template>
           </div>
         </div>
-      </template>
-
-      <!-- ==================== TAB 4: EXAM (EXACT MATCH TO REFERENCE SCREENSHOT 1) ==================== -->
-      <template x-if="currentTab === 'exam'">
-        <div class="space-y-8 max-w-3xl">
-          
-          <!-- Exam Setup Card (Matches Screenshot 1) -->
-          <template x-if="!examInProgress && !examFinished">
-            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
-              <div>
-                <h1 class="text-3xl font-serif text-ink-900">Timed Mock Exam</h1>
-                <p class="text-xs text-ink-600 mt-1">Full certification simulation with 90 seconds per question and comprehensive final score report.</p>
-              </div>
-
-              <div class="space-y-5 max-w-md text-xs">
-                <div>
-                  <label class="block font-semibold text-ink-700 mb-1.5">Select Track:</label>
-                  <select x-model="selectedExamTrack" @change="filterExamTrack(selectedExamTrack)" class="w-full bg-[#F7F6F2] border border-[#E5E2DA] rounded-xl p-3 text-xs text-ink-900 font-medium focus:outline-none focus:border-ink-900">
-                    <option value="all">All Certifications Combined (100 Questions)</option>
-                    <template x-for="track in tracks" :key="track">
-                      <option :value="track" x-text="track + ' (20 Questions)'"></option>
-                    </template>
-                  </select>
-                </div>
-
-                <div>
-                  <label class="block font-semibold text-ink-700 mb-1.5">Time Allowance:</label>
-                  <div class="p-3 bg-[#F7F6F2] border border-[#E5E2DA] rounded-xl font-mono text-ink-900 text-xs" x-text="getExamTimeAllowanceText()"></div>
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <button @click="startExam()" class="px-7 py-3.5 rounded-xl bg-ink-900 hover:bg-ink-800 text-white font-medium text-xs sm:text-sm transition shadow-sm">
-                  Begin Mock Exam
-                </button>
-              </div>
-            </div>
-          </template>
-
-          <!-- Exam in Progress Screen -->
-          <template x-if="examInProgress && !examFinished">
-            <div class="space-y-6">
-              <div class="flex items-center justify-between bg-white border border-[#E5E2DA] p-4 rounded-2xl text-xs font-mono">
-                <span class="text-ink-600">Question <strong class="text-ink-900" x-text="currentIndex + 1"></strong> of <span x-text="examQuestions.length"></span></span>
-                <span class="bg-[#EFECE6] px-3 py-1.5 rounded-lg text-ink-900 font-bold" x-text="'⏳ ' + formatTime(timeRemaining)"></span>
-                <button @click="finishExam()" class="px-3.5 py-1.5 bg-ink-900 text-white rounded-lg font-medium text-xs">Submit</button>
-              </div>
-
-              <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                <div class="text-base font-serif text-ink-900 leading-relaxed" x-text="currentExamQuestion.scenario"></div>
-                <div class="text-sm font-medium text-ink-900" x-text="currentExamQuestion.question"></div>
-
-                <div class="space-y-2.5">
-                  <template x-for="(opt, idx) in currentExamQuestion.options" :key="idx">
-                    <button 
-                      @click="selectExamOption(idx)"
-                      :class="{
-                        'border-[#E5E2DA] hover:border-ink-400 bg-white text-ink-900': examAnswers[currentExamQuestion.id] !== idx,
-                        'border-ink-900 bg-[#EFECE6] text-ink-900 font-medium': examAnswers[currentExamQuestion.id] === idx
-                      }"
-                      class="w-full text-left p-4 rounded-xl border transition text-sm flex items-start gap-3.5">
-                      <span class="font-mono text-xs text-ink-500 font-bold mt-0.5" x-text="String.fromCharCode(65 + idx) + '.'"></span>
-                      <span class="leading-relaxed" x-text="opt"></span>
-                    </button>
-                  </template>
-                </div>
-
-                <div class="pt-6 border-t border-[#E5E2DA] flex items-center justify-between text-xs">
-                  <button @click="prevExamQuestion()" :disabled="currentIndex === 0" class="px-4 py-2 rounded-lg bg-[#EFECE6] hover:bg-[#E5E2DA] disabled:opacity-40 disabled:cursor-not-allowed font-medium text-ink-900 transition">
-                    ← Previous
-                  </button>
-                  <button @click="nextExamQuestion()" :disabled="currentIndex >= examQuestions.length - 1" class="px-5 py-2 rounded-lg bg-ink-900 hover:bg-ink-800 text-white font-medium disabled:opacity-40 disabled:cursor-not-allowed transition">
-                    Next →
-                  </button>
-                </div>
-              </div>
-            </div>
-          </template>
-
-          <!-- Exam Finished Result Card -->
-          <template x-if="examFinished">
-            <div class="bg-white border border-[#E5E2DA] rounded-3xl p-8 text-center space-y-6 shadow-sm">
-              <h2 class="text-2xl font-serif text-ink-900">Exam Results</h2>
-              <p class="text-xs text-ink-600">Performance report for <span class="font-semibold text-ink-900" x-text="selectedExamTrack === 'all' ? 'All Certifications' : selectedExamTrack"></span></p>
-              
-              <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
-                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-                  <div class="text-2xl font-serif font-bold text-ink-900" x-text="calculateExamPercentage() + '%'"></div>
-                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Score</div>
-                </div>
-                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-                  <div class="text-2xl font-serif font-bold text-emerald-700" x-text="examScore + '/' + examQuestions.length"></div>
-                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Correct</div>
-                </div>
-                <div class="bg-[#F7F6F2] p-4 rounded-xl border border-[#E5E2DA]">
-                  <div :class="calculateExamPercentage() >= 75 ? 'text-emerald-700' : 'text-rose-600'" class="text-2xl font-serif font-bold" x-text="calculateExamPercentage() >= 75 ? 'PASS' : 'FAIL'"></div>
-                  <div class="text-[10px] uppercase font-bold text-ink-500 mt-1">Cutoff (75%)</div>
-                </div>
-              </div>
-              <div class="flex justify-center gap-3">
-                <button @click="restartExam()" class="px-5 py-2.5 bg-ink-900 hover:bg-ink-800 text-white text-xs font-medium rounded-xl">Retake Exam</button>
-                <button @click="navigate('practice')" class="px-5 py-2.5 bg-[#EFECE6] text-ink-900 text-xs font-medium rounded-xl hover:bg-[#E5E2DA]">Review in Study Mode</button>
-              </div>
-            </div>
-          </template>
-
-        </div>
-      </template>
-
-      <!-- ==================== TAB 5: PROGRESS (/progress/) ==================== -->
-      <template x-if="currentTab === 'progress'">
-        <div class="space-y-8 max-w-4xl">
-          <div>
-            <h1 class="text-3xl font-serif text-ink-900">Your Progress & Mastery</h1>
-            <p class="text-xs text-ink-600 mt-1">Detailed breakdown of question coverage and domain accuracy across 100 questions.</p>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
-              <span class="text-[10px] uppercase font-bold text-ink-500">Bank Coverage</span>
-              <div class="text-2xl font-serif font-bold text-ink-900 mt-1" x-text="answeredCount + ' / ' + rawQuestions.length"></div>
-              <div class="text-xs text-ink-600 mt-1" x-text="Math.round((answeredCount / rawQuestions.length) * 100) + '% completed'"></div>
-            </div>
-
-            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
-              <span class="text-[10px] uppercase font-bold text-ink-500">Overall Accuracy</span>
-              <div class="text-2xl font-serif font-bold text-emerald-700 mt-1" x-text="calculateAccuracy() + '%'"></div>
-              <div class="text-xs text-ink-600 mt-1" x-text="score + ' correct answers'"></div>
-            </div>
-
-            <div class="bg-white border border-[#E5E2DA] rounded-2xl p-5 shadow-sm">
-              <span class="text-[10px] uppercase font-bold text-ink-500">Flagged For Review</span>
-              <div class="text-2xl font-serif font-bold text-amber-700 mt-1" x-text="getReviewCount() + ' items'"></div>
-              <div class="text-xs text-ink-600 mt-1" x-text="bookmarks.length + ' bookmarked'"></div>
-            </div>
-          </div>
-
-          <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-            <h2 class="text-xl font-serif text-ink-900">Track-by-Track Mastery (20 Questions Each)</h2>
-            <div class="space-y-5">
-              <template x-for="track in tracks" :key="track">
-                <div class="space-y-1.5">
-                  <div class="flex items-center justify-between text-xs">
-                    <span class="font-medium text-ink-900 font-serif" x-text="track"></span>
-                    <span class="font-mono text-ink-600" x-text="getTrackScore(track)"></span>
-                  </div>
-                  <div class="w-full bg-[#EFECE6] h-2.5 rounded-full overflow-hidden">
-                    <div class="bg-ink-900 h-full transition-all duration-300" :style="'width: ' + getTrackPercentage(track) + '%'"></div>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
-      </template>
+      </div>
 
       <!-- ==================== TAB 6: SETTINGS (/settings/) ==================== -->
-      <template x-if="currentTab === 'settings'">
-        <div class="space-y-8 max-w-3xl">
-          <div>
-            <h1 class="text-3xl font-serif text-ink-900">Settings</h1>
-            <p class="text-xs text-ink-600 mt-1">Manage local progress and data export options.</p>
+      <div x-show="currentTab === 'settings'" class="space-y-8 max-w-3xl">
+        <div>
+          <h1 class="text-3xl font-serif text-ink-900">Settings</h1>
+          <p class="text-xs text-ink-600 mt-1">Manage local progress and data export options.</p>
+        </div>
+
+        <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 text-xs">
+          <div class="space-y-2 pb-6 border-b border-[#E5E2DA]">
+            <h3 class="font-serif text-base font-semibold text-ink-900">Backup Progress</h3>
+            <p class="text-ink-600">Export your local study progress and bookmarks as a JSON backup file.</p>
+            <button @click="exportData()" class="px-4 py-2.5 bg-ink-900 hover:bg-ink-800 text-white rounded-xl font-medium transition">
+              Download Backup JSON
+            </button>
           </div>
 
-          <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 text-xs">
-            <div class="space-y-2 pb-6 border-b border-[#E5E2DA]">
-              <h3 class="font-serif text-base font-semibold text-ink-900">Backup Progress</h3>
-              <p class="text-ink-600">Export your local study progress and bookmarks as a JSON backup file.</p>
-              <button @click="exportData()" class="px-4 py-2.5 bg-ink-900 hover:bg-ink-800 text-white rounded-xl font-medium transition">
-                Download Backup JSON
-              </button>
-            </div>
-
-            <div class="space-y-2">
-              <h3 class="font-serif text-base font-semibold text-rose-700">Clear Data</h3>
-              <p class="text-ink-600">Reset all answered questions, bookmarks, and mock exam results from this device.</p>
-              <button @click="resetProgress()" class="px-4 py-2.5 bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 rounded-xl font-medium transition">
-                Reset All Progress
-              </button>
-            </div>
+          <div class="space-y-2">
+            <h3 class="font-serif text-base font-semibold text-rose-700">Clear Data</h3>
+            <p class="text-ink-600">Reset all answered questions, bookmarks, and mock exam results from this device.</p>
+            <button @click="resetProgress()" class="px-4 py-2.5 bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 rounded-xl font-medium transition">
+              Reset All Progress
+            </button>
           </div>
         </div>
-      </template>
+      </div>
 
     </div>
   </div>
 
   <!-- EXAM / FOCUS SELECTOR MODAL -->
-  <template x-if="openTrackSelector">
-    <div class="fixed inset-0 bg-ink-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6" @click.away="openTrackSelector = false">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xl font-serif text-ink-900">Select Exam Focus</h3>
-          <button @click="openTrackSelector = false" class="text-ink-400 hover:text-ink-700 text-lg font-bold">✕</button>
+  <div x-show="openTrackSelector" x-cloak class="fixed inset-0 bg-ink-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-[#E5E2DA] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-6" @click.away="openTrackSelector = false">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-serif text-ink-900">Select Exam Focus</h3>
+        <button @click="openTrackSelector = false" class="text-ink-400 hover:text-ink-700 text-lg font-bold">✕</button>
+      </div>
+
+      <div class="space-y-2.5">
+        <div @click="selectAndStartTrack('all'); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
+          <span class="font-semibold text-ink-900">All Certifications Combined</span>
+          <span class="font-mono text-ink-500" x-text="rawQuestions.length + ' items'"></span>
         </div>
 
-        <div class="space-y-2.5">
-          <div @click="selectAndStartTrack('all'); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
-            <span class="font-semibold text-ink-900">All Certifications Combined</span>
-            <span class="font-mono text-ink-500" x-text="rawQuestions.length + ' items'"></span>
-          </div>
-
-          <template x-for="track in tracks" :key="track">
-            <div @click="selectAndStartTrack(track); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
-              <div>
-                <div class="font-semibold text-ink-900" x-text="track"></div>
-                <div class="text-[11px] text-ink-500 mt-0.5" x-text="getTrackDescription(track)"></div>
-              </div>
-              <span class="font-mono text-ink-500 shrink-0 ml-2" x-text="getTrackQuestionCount(track) + ' items'"></span>
+        <template x-for="track in tracks" :key="track">
+          <div @click="selectAndStartTrack(track); openTrackSelector = false" class="p-4 rounded-xl border border-[#E5E2DA] hover:border-ink-900 cursor-pointer transition flex items-center justify-between text-xs">
+            <div>
+              <div class="font-semibold text-ink-900" x-text="track"></div>
+              <div class="text-[11px] text-ink-500 mt-0.5" x-text="getTrackDescription(track)"></div>
             </div>
-          </template>
-        </div>
+            <span class="font-mono text-ink-500 shrink-0 ml-2" x-text="getTrackQuestionCount(track) + ' items'"></span>
+          </div>
+        </template>
       </div>
     </div>
-  </template>
+  </div>
 
   <!-- Complete App State & Engine -->
   <script>
-    const EMBEDDED_QUESTIONS = """ + json.dumps(questions) + """;
-
     function anthropicExamApp() {
       return {
         currentTab: 'home',
@@ -849,10 +827,16 @@
         openTrackSelector: false,
         activeQuestionView: false,
         currentIndex: 0,
-        rawQuestions: EMBEDDED_QUESTIONS,
+        rawQuestions: [],
         activeQuestions: [],
         examQuestions: [],
-        tracks: [],
+        tracks: [
+          'Claude Certified Prompt Engineer',
+          'Claude Certified Application Developer',
+          'Claude Agent & Tool Use Specialist (MCP)',
+          'Claude AI Solutions Architect',
+          'Claude Safety, Governance & Red Teaming'
+        ],
         userAnswers: {},
         examAnswers: {},
         bookmarks: [],
@@ -865,15 +849,14 @@
         timerInterval: null,
         examScore: 0,
 
-        initApp() {
-          this.tracks = [...new Set(this.rawQuestions.map(q => q.track))];
-          this.filterByTrack('all');
-          this.filterExamTrack('all');
+        async initApp() {
           this.loadStorage();
 
           const hash = window.location.hash.replace('#/', '').replace('#', '');
           if (['home', 'practice', 'review', 'exam', 'progress', 'settings'].includes(hash)) {
             this.currentTab = hash;
+          } else {
+            this.currentTab = 'home';
           }
           window.addEventListener('hashchange', () => {
             const h = window.location.hash.replace('#/', '').replace('#', '');
@@ -881,10 +864,25 @@
               this.currentTab = h;
             }
           });
+
+          // Fetch questions from questions.json
+          try {
+            const resp = await fetch('questions.json');
+            if (resp.ok) {
+              this.rawQuestions = await resp.json();
+            }
+          } catch (e) {
+            console.error('Failed to fetch questions.json:', e);
+          }
+
+          this.filterByTrack('all');
+          this.filterExamTrack('all');
+          this.updateStats();
         },
 
         navigate(tab) {
           this.currentTab = tab;
+          this.activeQuestionView = false;
           window.location.hash = '#/' + tab;
           window.scrollTo({ top: 0, behavior: 'smooth' });
         },
@@ -926,7 +924,7 @@
         },
 
         getExamTimeAllowanceText() {
-          const count = this.examQuestions.length;
+          const count = this.examQuestions.length || 100;
           const mins = Math.round((count * 90) / 60);
           return `${count} Questions • ${mins} minutes total`;
         },
@@ -952,7 +950,7 @@
         },
 
         getTrackQuestionCount(track) {
-          return this.rawQuestions.filter(q => q.track === track).length;
+          return this.rawQuestions.filter(q => q.track === track).length || 20;
         },
 
         getTrackDescription(track) {
@@ -968,9 +966,10 @@
 
         getTrackProgressText(track) {
           const trackQs = this.rawQuestions.filter(q => q.track === track);
+          const total = trackQs.length || 20;
           const answered = trackQs.filter(q => this.userAnswers[q.id] !== undefined);
-          if (answered.length === 0) return `${trackQs.length} scenarios · not started`;
-          return `${answered.length} of ${trackQs.length} completed (${Math.round((answered.length / trackQs.length) * 100)}%)`;
+          if (answered.length === 0) return `${total} scenarios · not started`;
+          return `${answered.length} of ${total} completed (${Math.round((answered.length / total) * 100)}%)`;
         },
 
         get currentQuestion() {
@@ -1070,7 +1069,7 @@
           this.examAnswers = {};
           this.examInProgress = true;
           this.examFinished = false;
-          this.timeRemaining = this.examQuestions.length * 90;
+          this.timeRemaining = (this.examQuestions.length || 20) * 90;
           this.currentIndex = 0;
           clearInterval(this.timerInterval);
           this.timerInterval = setInterval(() => {
@@ -1113,17 +1112,19 @@
 
         getTrackScore(track) {
           const trackQs = this.rawQuestions.filter(q => q.track === track);
+          const total = trackQs.length || 20;
           const answered = trackQs.filter(q => this.userAnswers[q.id] !== undefined);
           const correct = answered.filter(q => this.userAnswers[q.id] === q.correctIndex);
-          return correct.length + ' / ' + trackQs.length;
+          return correct.length + ' / ' + total;
         },
 
         getTrackPercentage(track) {
           const trackQs = this.rawQuestions.filter(q => q.track === track);
+          const total = trackQs.length || 20;
           const answered = trackQs.filter(q => this.userAnswers[q.id] !== undefined);
           const correct = answered.filter(q => this.userAnswers[q.id] === q.correctIndex);
-          if (!trackQs.length) return 0;
-          return Math.round((correct.length / trackQs.length) * 100);
+          if (!total) return 0;
+          return Math.round((correct.length / total) * 100);
         },
 
         formatTime(seconds) {
